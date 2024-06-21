@@ -89,7 +89,9 @@ if [ $is_yz = true ];then
 
     # 提取目标rom指定镜像并分解
     green "开始分解目标包剩余逻辑分区镜像" 
-    for image in ${super_list};do
+    list=${super_list}
+    list+=" reserve"
+    for image in ${list};do
         rm -rf baserom/images/${image}.img
         if [ -d portrom/images/${image} ];then
             continue
@@ -109,7 +111,7 @@ if [ $is_yz = true ];then
     # . ./patch.sh
 else
     list=${super_list}
-    list+=" boot"
+    list+=" boot reserve"
     for image in $list;do
         if [ -f baserom/images/${image}.img ];then
             extract_img baserom/images/${image}.img portrom/images
