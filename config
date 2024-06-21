@@ -1,0 +1,36 @@
+# 一些依赖的环境变量 将以. ./config方式导入  所有此文件为sh文件
+
+# 移除data分区加密 为 true 生效
+remove_data_encrypt=false
+
+# 关闭avb验证 为 true 生效
+disable_avb_verify=false
+
+# 可能的super子分区列表
+super_list="vendor system product odm my_engineering system_ext my_product my_stock my_heytap my_company my_carrier my_region my_preload my_bigball my_manifest"
+
+# 是否打包为super
+make_super=false
+
+# 打包的super类型 有 VAB AB A
+super_type=VAB
+
+# VAB的super启动的slot
+super_slot=a
+
+# 打包的super大小   9126805504  7516192768
+super_size=7516192768
+
+# 打包的镜像类型 erofs ext auto(按原镜像类型)
+pack_type=auto
+
+#如果为空不进行更改
+base_rom_density=380
+
+build_user="zhlhlf"
+
+build_host=$(hostname)
+
+os_type="ColorOS"
+
+is_eu_rom=false

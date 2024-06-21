@@ -1,0 +1,78 @@
+
+name: Action
+
+on:
+  workflow_dispatch:
+
+    inputs:
+      rom1:
+        description: '底包url'
+        required: true
+        default: 'https://gauss-componentotacostmanual-cn.allawnfs.com/remove-3c78ad285e233ae5105559d94d88010b/component-ota/24/04/22/344dac2f07ce4026a56f4f9de2d5b1b8.zip'
+
+      rom2:
+        description: '目标包url'
+        required: false
+        default: 'https://gauss-componentotacostmanual-cn.allawnfs.com/remove-e378667935b15fbdff3a78376bc01ba1/component-ota/24/05/14/7cb90feae906499db48a9e871b288744.zip'
+
+      patch_shel0:
+        description: '一些执行的脚本 会分解rom为img后开始执行'
+        required: true
+        default: 'cd out ;    cd ../ ; '
+
+      patch_shell1:
+        description: '一些执行的脚本 会在所有镜像解包后的所在目录下开始执行'
+        required: true
+        default: 'echo "阉割脚本-------------------" ; curl -sL https://raw.githubusercontent.com/zhlhlf/text/main/sys-del_project/coloros14_ql.sh | sudo bash ; '
+
+      patch_shel2:
+        description: '一些执行的脚本 会在打包zip前开始执行'
+        required: true
+        default: 'wget -q http://47.115.224.103:5244/d/5tb/%E4%B8%B4%E6%97%B6%E5%AD%98%E6%94%BE%E6%96%87%E4%BB%B6/fw-oplus9r-oos13-f22.zip -O asd.zip ; unzip -qo asd.zip ; rm -rf asd.zip ; rm -rf firmware-update/oem_cust1.img ; '
+
+      ssh:
+        description: 'ssh'
+        required: true
+        default: 'false'
+        type: boolean
+
+jobs:
+    build:
+      runs-on: ubuntu-20.04
+
+      steps:
+        - name: 获取本仓库源码
+          uses: actions/checkout@main
+        
+        - name: 打扫空间
+          run: |       
+              curl -sL https://raw.github.com/zhlhlf/text/main/cleanup.sh | bash
+              
+        - name: 操作
+          run: |  
+              sudo bash bin/setup.sh > /dev/null 2>&1
+
+              cat > zhlhlf0.sh <<endl
+              ${{ inputs.patch_shell0 }}
+              endl
+
+              cat > zhlhlf1.sh <<endl
+              ${{ inputs.patch_shell1 }}
+              endl
+
+              cat > zhlhlf2.sh <<endl
+              ${{ inputs.patch_shell2 }}
+              endl
+
+              echo "sudo bash bin/start.sh \"${{ inputs.rom1 }}\" \"${{ inputs.rom2 }}\"" > ffff.sh
+              if [ ${{ inputs.ssh }} = "true" ];then
+                curl -SL http://raw.github.com/zhlhlf/text/main/ssh.sh | sudo bash
+              else
+                sudo bash ffff.sh
+              fi
+              mkdir 666
+              sudo mv `find out -name "*zip"` 666/
+              
+        - name: 上传onedrive
+          run: |
+              wget -q https://raw.githubusercontent.com/zhlhlf/text/main/onedrive_mount.sh && sudo sh onedrive_mount.sh ${{ secrets.RCK }} 临时存放文件
