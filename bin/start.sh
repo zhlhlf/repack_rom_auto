@@ -136,9 +136,9 @@ change_buildTime_buildProp portrom/images
 
 blue "去系统apk签名验证.."
 #处理 framework.jar 去系统apk签名验证
-patch_methods="getMinimumSignatureSchemeVersionForTargetSdk "
-paths="android/util/apk "
-patch1_jar portrom/images/system/system/framework/framework.jar "$paths" "$patch_methods"
+# patch_methods="getMinimumSignatureSchemeVersionForTargetSdk "
+# paths="android/util/apk "
+# patch1_jar portrom/images/system/system/framework/framework.jar "$paths" "$patch_methods"
 
 #处理 services.jar 去系统apk签名验证
 patch_methods="--assertMinSignatureSchemeIsValid "

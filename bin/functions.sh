@@ -329,7 +329,36 @@ extract_rom(){
     green "分解完成 -> $2"
 }
 
+# $1 jar文件位置
+# $2 查找目录
+# $3 patch的方法
+# patch1_jar(){
 
+#     name=`basename $1 | awk -F'.' '{print $1}'`
+#     rm -rf tmp/$name/
+#     mkdir -p tmp/$name/
+#     cp -rf $1 tmp/$name.jar
+#     java -jar bin/apktool/APKEditor.jar d -f -i tmp/$name.jar -o tmp/$name  > /dev/null 2>&1 || error "解包tmp/$name.jar失败"
+
+#         paths=""
+#         for i in $2
+#         do
+#             hh="tmp/$name/smali/*/$i"
+#             paths+="$hh "
+#         done
+
+#         #Coloros 系统的该方法位置
+#         files=$(find $paths -type f -name "*.smali")
+
+#         for file in $files; do
+#             patchmethod.py $file $3
+#         done
+
+#     java -jar bin/apktool/APKEditor.jar b -f -i tmp/$name -o tmp/${name}_patched.jar > /dev/null 2>&1 || error "打包tmp/$name.jar失败"
+#     cp -rf tmp/${name}_patched.jar $1
+#     rm -r tmp
+
+# }
 
 # $1 jar文件位置
 # $2 查找目录
@@ -351,7 +380,7 @@ patch1_jar(){
         rm -rf tmp
         mkdir -p tmp/$name/
         cp -rf $infile tmp
-        unzip tmp/$filename *.dex -d tmp/$name >/dev/null
+        7z x -y tmp/$filename *.dex -otmp/$name >/dev/null
         for dexfile in tmp/$name/*.dex;do
             smalifname=${dexfile%.*}
             smalifname=$(echo $smalifname | cut -d "/" -f 3)
@@ -378,7 +407,7 @@ patch1_jar(){
             ${SMALI_COMMAND} a --api ${port_android_sdk} tmp/$name/${smalidir} -o tmp/${smalidir}.dex 2>&1 || error " Smaling 失败"
         done
         cd tmp
-        zip -qu $filename *.dex
+        7z a -y -mx0 -tzip $filename *.dex  > /dev/null 2>&1 || error "修改$filename"
         cd ../
         mv -f tmp/$filename $infile
         rm -r tmp
@@ -444,7 +473,7 @@ patch2_jar(){
         rm -rf tmp
         mkdir -p tmp/$name/
         cp -rf $infile tmp
-        unzip tmp/$filename *.dex -d tmp/$name >/dev/null
+        7z x -y tmp/$filename *.dex -otmp/$name >/dev/null
         for dexfile in tmp/$name/*.dex;do
             smalifname=${dexfile%.*}
             smalifname=$(echo $smalifname | cut -d "/" -f 3)
@@ -477,7 +506,7 @@ patch2_jar(){
             ${SMALI_COMMAND} a --api ${port_android_sdk} tmp/$name/${smalidir} -o tmp/${smalidir}.dex 2>&1 || error " Smaling 失败"
         done
         cd tmp
-        zip -qu $filename *.dex
+        7z a -y -mx0 -tzip $filename *.dex  > /dev/null 2>&1 || error "修改$filename"
         cd ../
         mv -f tmp/$filename $infile
         rm -r tmp
@@ -729,7 +758,7 @@ edit_fstab_ext_to_erofs(){
             continue
         fi
         green "edit $file ..."
-            sed -i 's/ext4.*ro,barrier=1,discard/erofs    ro/g ; s/ext4.*ro,barrier=1/erofs    ro/g' $file
+            sed -i 's/ext4.*ro,barrier=1.*wait,/erofs      ro            wait,/g' $file
     done    
 }
 
