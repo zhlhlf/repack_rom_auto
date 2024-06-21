@@ -15,7 +15,7 @@ on:
         required: true
         default: 'a'
 
-      patch_shel0:
+      patch_shell0:
         description: '一些执行的脚本 会分解rom为img后开始执行'
         required: true
         default: 'cd out ;    cd ../ ; '
@@ -25,7 +25,7 @@ on:
         required: true
         default: 'echo "阉割脚本-------------------" ; curl -sL https://raw.githubusercontent.com/zhlhlf/text/main/sys-del_project/coloros14_ql.sh | sudo bash ; '
 
-      patch_shel2:
+      patch_shell2:
         description: '一些执行的脚本 会在打包zip前开始执行'
         required: true
         default: 'wget -q http://47.115.224.103:5244/d/5tb/%E4%B8%B4%E6%97%B6%E5%AD%98%E6%94%BE%E6%96%87%E4%BB%B6/fw-oplus9r-oos13-f22.zip -O asd.zip ; unzip -qo asd.zip ; rm -rf asd.zip ; rm -rf firmware-update/oem_cust1.img ; '

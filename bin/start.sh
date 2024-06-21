@@ -224,7 +224,8 @@ else
 fi
 
 green "要打包为zip的文件目录树"
-du -h
+green "---------------------"
+du -h `find -type f`
 green "---------------------"
 zip -qr out.zip *
 time=$(date +"%Y-%m-%d")
