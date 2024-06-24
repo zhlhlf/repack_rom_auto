@@ -46,7 +46,7 @@ jobs:
         
         - name: 打扫空间
           run: |       
-              curl -sL https://raw.github.com/zhlhlf/text/main/cleanup.sh | bash
+              curl -sL https://raw.github.com/zhlhlf/text/main/cleanup.sh | bash >/dev/null 2>&1
               
         - name: 操作
           run: |  
