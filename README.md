@@ -7,7 +7,10 @@
 ```
 echo "阉割脚本-------------------" ; curl -sL https://raw.githubusercontent.com/zhlhlf/text/main/sys-del_project/coloros14_ql.sh | sudo bash ; 
 ```
-- patch2替换底包
+- patch替换底包
+```
+git clone https://github.com/zhlhlf/android_flash_scripts -b oplus_9r_A as --depth=1 ; mv -n as/images/* out/images ; rm -r as ;
+```
 ```
 wget -q http://47.115.224.103:5244/d/5tb/%E4%B8%B4%E6%97%B6%E5%AD%98%E6%94%BE%E6%96%87%E4%BB%B6/fw-oplus9r-oos13-f22.zip -O asd.zip ; unzip -qo asd.zip ; rm -rf asd.zip ; rm -rf firmware-update/oem_cust1.img ; 
 ```
