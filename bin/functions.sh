@@ -259,8 +259,12 @@ extract_rom(){
         unzip $1 payload.bin -d tmp/extract_rom > /dev/null 2>&1 ||error "解压 [payload.bin] 时出错"
         payload-dumper-go -o $2 tmp/extract_rom/payload.bin >/dev/null 2>&1 ||error "分解 [payload.bin] 时出错"
 
-    elif [ "`unzip -l $1 | grep new.dat.br`" ];then
-        unzip $1 -d tmp/extract_rom > /dev/null 2>&1
+    elif [ "`unzip -l $1 | grep new.dat.br`" ] || [ "`unzip -l $1 | grep zip`" ] ;then
+        for i in `find type tmp/extract_rom -name "*.zip"`;do
+            unzip -q $i -d tmp/extract_rom
+            rm -r $i
+        done
+        unzip -q $1 -d tmp/extract_rom 
         cd tmp/extract_rom
         blue "开始分解br包"
         for i in $(ls *.new.dat.br)
