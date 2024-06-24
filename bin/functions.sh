@@ -260,7 +260,7 @@ extract_rom(){
         payload-dumper-go -o $2 tmp/extract_rom/payload.bin >/dev/null 2>&1 ||error "分解 [payload.bin] 时出错"
 
     elif [ "`unzip -l $1 | grep new.dat.br`" ] || [ "`unzip -l $1 | grep zip`" ] ;then
-        unzip -q $1 -d tmp/extract_rom 
+        unzip -qo $1 -d tmp/extract_rom 
         cd tmp/extract_rom
         for i in `find -name "*.zip"`;do
             unzip -q $i
