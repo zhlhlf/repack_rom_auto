@@ -263,7 +263,7 @@ extract_rom(){
         unzip -qo $1 -d tmp/extract_rom 
         cd tmp/extract_rom
         for i in `find -name "*.zip"`;do
-            unzip -q $i
+            unzip -qo $i
             rm -r $i
         done
         blue "开始分解br包"
