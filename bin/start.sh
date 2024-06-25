@@ -165,7 +165,7 @@ if [ $remove_data_encrypt = true ];then
     remove_data_encrypt portrom/images
 fi
 
-if [ ! "$base_rom_density" = "" ];then
+if [ "$base_rom_density" ];then
     edit_rom_density portrom/images $base_rom_density
 fi
 
@@ -209,9 +209,8 @@ do
 	mv -f baserom/images/$i.img out/images/
 done
 
-rm -rf portrom
-rm -rf baserom/images/reserve.img baserom/images/recovery.img 
 mv baserom/images/*.* out/firmware-update
+rm -rf portrom out/firmware-update/recovery.img 
 
 green "edit vbmeta.img 关闭avb校验"
 patch-vbmeta.py out/images/vbmeta.img
