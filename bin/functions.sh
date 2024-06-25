@@ -652,18 +652,22 @@ repack_img(){
     name=`basename $input_file`
     img_out="$input_file/../out/$name.img"
     
-    type=`cat $input_file/../config/${name}_info`    
+    type=`sed -n 1p $input_file/../config/${name}_info`    
 
     # 判断$2 是否有输入 并...
     is=0
-    if [ "$2" ];then
+    is1=0
+    if [ "$2" ] && [ $2 != auto ];then
     	for i in "ext" "erofs"  # 可以互相自定义转换的两个类型
     	do
     		if [ $type = $i ];then
          	   is=1
         	fi
+    		if [ $2 = $i ];then
+         	   is1=1
+        	fi            
     	done
-    	if [ $is = 1 ];then
+    	if [ $is = 1 ] && [ $is1 = 1 ];then
     	   type=$2
     	fi
     fi
