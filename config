@@ -22,7 +22,7 @@ super_slot=a
 super_size=7516192768
 
 # 打包的镜像类型 erofs ext auto(按原镜像类型)
-pack_type=erofs
+pack_type=auto
 
 #如果为空不进行更改
 base_rom_density=380
