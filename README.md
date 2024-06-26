@@ -12,7 +12,7 @@ echo "阉割脚本-------------------" ; curl -sL https://raw.githubusercontent.
 git clone https://github.com/zhlhlf/android_flash_scripts -b oplus_9r_A as --depth=1 ; mv as/* out ; mv -n out/images/* baserom/images ; rm -r as ;
 ```
 ```
-fw="http://47.115.224.103:5244/d/5tb/%E4%B8%80%E5%8A%A09r/fw/fw-oplus9r-oos14-601.zip" ; wget -q $fw -O asd.zip ; rm -rf firmware-update ; unzip -qo asd.zip ; rm -rf asd.zip ; 
+wget -q http://47.115.224.103:5244/d/5tb/%E4%B8%80%E5%8A%A09r/fw/fw-oplus9r-oos14-601.zip -O asd.zip ; rm -rf firmware-update ; unzip -qo asd.zip ; rm -rf asd.zip ; 
 ```
 ```
 git clone https://github.com/zhlhlf/android_flash_scripts -b oplus_9r_ab as --depth=1 ; cp -r as/* ./ ; rm -r as ;
