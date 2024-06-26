@@ -779,7 +779,7 @@ remove_data_encrypt() {
             continue
         fi
         green "edit $file ..."
-        sed -i s/,fileencryption.*metadata_encryption//g "$file"
+        sed -i s/,fileencryption.*quota/quota/g "$file"
     done
 }
 
