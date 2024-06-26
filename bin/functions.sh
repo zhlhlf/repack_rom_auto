@@ -463,21 +463,21 @@ patch1_jar(){
 #         hh="tmp/$name/smali/*/$i"
 #         paths+="$hh "
 #     done
-
-#     #Coloros 系统的该方法位置
-#     files=$(find $paths -type f -name "*.smali")
-    
-#     for i in $files; do
-#         x=`grep -n "$3" "$i" | cut -d ':' -f 1`
-#         if [ "$x" ];then
-#             yellow "$i patched"
-#             reg=`sed -n ${x}p $i | cut -d '{' -f 2 | cut -d '}' -f 1`
-#             x1=$((x+2))
-#             sed -i "${x1}s#move-result $reg#const/4 $reg, 0x0#" $i
-#             sed -i "${x}d" $i
-#         fi
-#     done
-
+#
+#         #Coloros 系统的该方法位置
+#         files=$(find $paths -type f -name "*.smali")
+#         for i in $files; do
+#             x=`grep -n "$3" "$i" | cut -d ':' -f 1`
+#             if [ "$x" ];then
+#                 yellow "$i patched"
+#                 x1=$((x+2))
+#                 reg=`sed -n ${x1}p $i | cut -d 't' -f 2`
+#                 sed -i "${x1}i\\\tconst/4 $reg, 0x0" $i
+#                 sed -i "${x}d" $i
+#                 sed -i "${x1}d" $i
+#             fi
+#         done
+#
 #     java -jar bin/apktool/APKEditor.jar b -f -i tmp/$name -o tmp/${name}_patched.jar > /dev/null 2>&1
 #     cp -rf tmp/${name}_patched.jar $1
 #     rm -r tmp
@@ -489,6 +489,7 @@ patch1_jar(){
 # $3 patch的方法的调用
 # 把调用返回置为0
 patch2_jar(){
+    port_android_sdk=34
     if [ $is_eu_rom == "true" ]; then
        SMALI_COMMAND="java -jar bin/apktool/smali-3.0.5.jar"
        BAKSMALI_COMMAND="java -jar bin/apktool/baksmali-3.0.5.jar" 
@@ -521,15 +522,15 @@ patch2_jar(){
 
         #Coloros 系统的该方法位置
         files=$(find $paths -type f -name "*.smali")
-
         for i in $files; do
             x=`grep -n "$3" "$i" | cut -d ':' -f 1`
             if [ "$x" ];then
                 yellow "$i patched"
-                reg=`sed -n ${x}p $i | cut -d '{' -f 2 | cut -d '}' -f 1`
                 x1=$((x+2))
-                sed -i "${x1}s#move-result $reg#const/4 $reg, 0x0#" $i
+                reg=`sed -n ${x1}p $i | cut -d 't' -f 2`
+                sed -i "${x1}i\\\tconst/4 $reg, 0x0" $i
                 sed -i "${x}d" $i
+                sed -i "${x1}d" $i
             fi
         done
 
