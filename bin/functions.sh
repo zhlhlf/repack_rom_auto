@@ -255,11 +255,11 @@ extract_rom(){
     rm -rf tmp/extract_rom
     mkdir -p tmp/extract_rom
 
-    pack_type=`gettype.py $1`
-    if [ $pack_type = zip ];then
+    rom_pack_type=`gettype.py $1`
+    if [ $rom_pack_type = zip ];then
         blue "[zip] 解压 $1 ..."
         unzip -qo $1 -d tmp/extract_rom || error "[zip]解压 $1 时出错"       
-    elif [ $pack_type = 7z ];then
+    elif [ $rom_pack_type = 7z ];then
         blue "[7z] 解压 $1 ..."
         7z x $1 -otmp/extract_rom >/dev/null 2>&1 || error "[7z]解压 $1 时出错"    
     else
