@@ -356,7 +356,7 @@ extract_rom(){
         fi
         mv -n "$tt" "$2"
     done
-    rm -rf tmp/extract_rom
+    rm -rf tmp/extract_rom rom_image_list
     green "分解完成 -> $2"
 }
 
