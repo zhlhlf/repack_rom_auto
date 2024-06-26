@@ -254,21 +254,47 @@ extract_rom(){
     fi
     rm -rf tmp/extract_rom
     mkdir -p tmp/extract_rom
-    if [ "`unzip -l $1 | grep payload.bin`" ];then
-        blue "开始分解 payload.bin包"
-        unzip $1 payload.bin -d tmp/extract_rom > /dev/null 2>&1 ||error "解压 [payload.bin] 时出错"
-        payload-dumper-go -o $2 tmp/extract_rom/payload.bin >/dev/null 2>&1 ||error "分解 [payload.bin] 时出错"
 
-    elif [ "`unzip -l $1 | grep new.dat.br`" ] || [ "`unzip -l $1 | grep zip`" ] ;then
-        unzip -qo $1 -d tmp/extract_rom
+    pack_type=`gettype.py $1`
+    if [ $pack_type = zip ];then
+        blue "[zip] 解压 $1 ..."
+        unzip -qo $1 -d tmp/extract_rom || error "[zip]解压 $1 时出错"       
+    elif [ $pack_type = 7z ];then
+        blue "[7z] 解压 $i ..."
+        7z x $1 -otmp/extract_rom >/dev/null 2>&1 || error "[7z]解压 $1 时出错"    
+    else
+        error "此包暂不支持"
+        exit 1
+    fi
+
+    #进一步处理存在的zip
+    file=`find tmp/extract_rom -name "*.zip"`
+    if [ "$file" ];then
+        for i in $file;do
+            blue "[zip] 解压 $i ..."
+            unzip -qo $i -d tmp/extract_rom
+            rm -r $i
+        done
+    fi
+
+    #存在payload.bin即分解
+    file=`find tmp/extract_rom -name "payload.bin"`
+    if [ "$file" ];then
+        blue "开始分解 payload.bin包"
+        payload-dumper-go -o $2 tmp/extract_rom/payload.bin >/dev/null 2>&1 ||error "分解 [payload.bin] 时出错"
+    fi
+
+    #存在br文件即分解
+    file=`find tmp/extract_rom -name "*new.dat.br"`
+    if [ "$file" ];then
         cd tmp/extract_rom
         for i in `find -name "*.zip"`;do
             unzip -qo $i
             rm -r $i
         done
-        blue "开始分解br包"
         for i in $(ls *.new.dat.br)
         do
+            blue "[br]分解 $i ..."
             line=$(basename $i .new.dat.br) 
             brotli -d $i
             rm -r $i
@@ -283,33 +309,19 @@ extract_rom(){
         done
         rm -r *.dat
         cd ../../
-        mv `find tmp/extract_rom -name "*.img"` $2
-        rm -rf tmp/extract_rom
-    elif [ "`unzip -l $1 | grep vendor.img`" ];then
-        green "检测为zip包且存在vendor.img 尝试解压"
-        rm -rf tmp/extract_rom
-        mkdir -p tmp/extract_rom
-        unzip -qo $1 -d tmp/extract_rom
-        mv `find tmp/extract_rom -name "*.img"` $2
-    elif [ `gettype.py $1` = 7z ];then
-        blue "开始解压7z包…"
-        rm -rf tmp/extract_rom
-        mkdir -p tmp/extract_rom
-        7z x $1 -otmp/extract_rom
-        mv `find tmp/extract_rom -name "*.img"` $2
-    elif [ "`unzip -l $1 | grep super`" ];then
-        green "检测为zip包且存在super 尝试解压"
-        rm -rf tmp/extract_rom
-        mkdir -p tmp/extract_rom
-        unzip -qo $1 -d tmp/extract_rom
-        file=`find tmp/extract_rom -name "super.*"`
+    fi
+
+    #处理super
+    file=`find tmp/extract_rom -name "*super*"`
+    if [ "$file" ];then
         if [ `gettype.py $file` = zst ];then
-            blue "正在解压[zst] $file ..."
+            blue "[zst]解压 $file ..."
             zstd --rm -d $file -o tmp/extract_rom/super.img >> /dev/null 2>&1
         fi
+
         file=`find tmp/extract_rom -name "super.*"`
         if [ `gettype.py $file` = super ];then
-            blue "正在解压[super] $file ..."
+            blue "[super]解压 $file ..."
             lpunpack.py $file tmp/extract_rom/super >> /dev/null 2>&1
             rm -r $file
             del=0
@@ -331,11 +343,9 @@ extract_rom(){
             error "分解错误"
             exit 1
         fi
-        mv `find tmp/extract_rom -name "*.img"` $2
-    else
-        error "此包暂不支持"
-        exit 1
     fi
+    mv `find tmp/extract_rom -name "*.img"` $2
+    rm -rf tmp/extract_rom
     green "分解完成 -> $2"
 }
 
