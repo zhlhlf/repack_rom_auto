@@ -260,7 +260,7 @@ extract_rom(){
         blue "[zip] 解压 $1 ..."
         unzip -qo $1 -d tmp/extract_rom || error "[zip]解压 $1 时出错"       
     elif [ $pack_type = 7z ];then
-        blue "[7z] 解压 $i ..."
+        blue "[7z] 解压 $1 ..."
         7z x $1 -otmp/extract_rom >/dev/null 2>&1 || error "[7z]解压 $1 时出错"    
     else
         error "此包暂不支持"
@@ -344,7 +344,18 @@ extract_rom(){
             exit 1
         fi
     fi
-    mv `find tmp/extract_rom -name "*.img"` $2
+    
+    find tmp/extract_rom -name "*.img" > rom_image_list
+    i=1
+    while true
+    do
+        tt=`sed -n ${i}p rom_image_list`
+        i=$((i+1))
+        if [ ! "$tt" ];then
+            break
+        fi
+        mv -n "$tt" "$2"
+    done
     rm -rf tmp/extract_rom
     green "分解完成 -> $2"
 }
