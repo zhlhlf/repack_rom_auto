@@ -291,6 +291,12 @@ extract_rom(){
         mkdir -p tmp/extract_rom
         unzip -qo $1 -d tmp/extract_rom
         mv `find tmp/extract_rom -name "*.img"` $2
+    elif [ `gettype.py $1` = 7z ];then
+        blue "开始解压7z包…"
+        rm -rf tmp/extract_rom
+        mkdir -p tmp/extract_rom
+        7z x $1 -otmp/extract_rom
+        mv `find tmp/extract_rom -name "*.img"` $2
     elif [ "`unzip -l $1 | grep super`" ];then
         green "检测为zip包且存在super 尝试解压"
         rm -rf tmp/extract_rom
