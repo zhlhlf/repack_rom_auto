@@ -345,6 +345,7 @@ extract_rom(){
         fi
     fi
     
+    echo > img_sha256sum
     find tmp/extract_rom -name "*.img" > rom_image_list
     i=1
     while true
@@ -354,9 +355,11 @@ extract_rom(){
         if [ ! "$tt" ];then
             break
         fi
+        sha256sum "$tt" >> img_sha256sum
         mv -n "$tt" "$2"
     done
-    rm -rf tmp/extract_rom rom_image_list
+    cat img_sha256sum
+    rm -rf tmp/extract_rom rom_image_list img_sha256sum
     green "分解完成 -> $2"
 }
 

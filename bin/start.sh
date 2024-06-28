@@ -232,7 +232,9 @@ fi
 
 green "要打包为zip的文件目录树"
 green "---------------------"
-du -h `find -type f`
+du -h `find -type f` > rom_tree.txt
+sha256sum `find -type f` >> rom_tree.txt
+cat rom_tree.txt
 green "---------------------"
 zip -qr out.zip *
 time=$(date +"%Y-%m-%d")
