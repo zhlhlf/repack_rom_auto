@@ -829,6 +829,7 @@ change_buildTime_buildProp(){
         # 添加build user信息
         sed -i "s/ro.build.user=.*/ro.build.user=${build_user}/g" ${i}
     done
+
 }
 
 get_rom_msg(){
@@ -855,6 +856,7 @@ get_rom_msg(){
 
     if [ ! "$portromImagesDir" ];then
         port_android_sdk=$base_android_sdk
+        
         green "Android Version: BASEROM:[Android ${base_android_version}]"
         green "SDK Verson: BASEROM: [SDK ${base_android_sdk}]"
         green "ROM Version: BASEROM: [${base_rom_version}]"

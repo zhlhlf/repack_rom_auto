@@ -2,7 +2,7 @@
 
 work_dir=$(pwd)
 tools_dir=${work_dir}/bin/$(uname)/$(uname -m)
-export PATH=$PATH:$(pwd)/bin/py:$(pwd)/bin/$(uname)/$(uname -m)/
+export PATH=$PATH:$(pwd)/bin/pys:$(pwd)/bin/$(uname)/$(uname -m)/
 chmod 777 * -R
 
 # 导入环境变量
@@ -123,6 +123,12 @@ else
 
 fi
 
+if grep -q "ro.build.ab_update=true" portrom/images/vendor/build.prop; then
+    update_type=AB
+else
+    update_type=A
+fi
+
 # 通常是精简脚本 在打解目录执行
 if [ -f ./zhlhlf1.sh ];then
     green "存在自定义编辑 开始执行"
@@ -233,9 +239,9 @@ time=$(date +"%Y-%m-%d")
 hash=$(md5sum out.zip | head -c 10)
 
 if [ $is_yz = true ];then
-    mv out.zip ${base_product_device}_${os_type}_${port_android_version}_from_${port_product_device}_fw_${base_rom_version}-${time}_${pack_type}.zip
+    mv out.zip ${base_product_device}_${update_type}_${os_type}_${port_android_version}_from_${port_product_device}_fw_${base_rom_version}-${time}_${pack_type}.zip
 else
-    mv out.zip ${base_product_device}_${os_type}_${base_rom_version}-${time}_${pack_type}.zip
+    mv out.zip ${base_product_device}_${update_type}_${os_type}_${base_rom_version}-${time}_${pack_type}.zip
 fi
 
 cd ..
