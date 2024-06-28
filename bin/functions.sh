@@ -724,7 +724,8 @@ repack_img(){
     else
         mount_dir="/$name"
     fi
-    UTC=$(date -u +%s)
+    #UTC=$(date -u +%s)
+    UTC=1719600457
 
     if [ $type = "erofs" ];then
         mkfs.erofs -zlz4hc,1 -T $UTC --mount-point /$name --fs-config-file $input_file/../config/${name}_fs_config --file-contexts $input_file/../config/${name}_file_contexts $img_out $input_file >/dev/null 2>&1 || rm -rf $img_out
@@ -817,9 +818,12 @@ edit_rom_density(){
 change_buildTime_buildProp(){
     # build.prop 修改
     blue "正在修改 build.prop 中 build.date属性..."
-    #change the locale to English
-    buildDate=$(date -u +"%a %b %d %H:%M:%S UTC %Y")
-    buildUtc=$(date +%s)
+
+    #buildDate=$(date -u +"%a %b %d %H:%M:%S UTC %Y")
+    buildDate="Fri Jun 28 18:48:41 UTC 2024"
+    #buildUtc=$(date +%s)
+    buildUtc=1719600499
+    
     for i in $(find $1 -type f -name "build.prop");do
         sed -i "s/ro.build.date=.*/ro.build.date=${buildDate}/g" ${i}
         sed -i "s/ro.build.date.utc=.*/ro.build.date.utc=${buildUtc}/g" ${i}
