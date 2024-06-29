@@ -689,6 +689,8 @@ repack_img(){
     img_out="$input_file/../out/$name.img"
     
     type=`sed -n 1p $input_file/../config/${name}_info`    
+    fs=$input_file/../config/${name}_fs_config
+    file=$input_file/../config/${name}_file_contexts
 
     # 判断$2 是否有输入 并...
     is=0
@@ -713,11 +715,10 @@ repack_img(){
     fi
     
     blue "[$type] $input_file -> $name.img"
-    if [ -f $input_file/../config/${name}_fs_config ];then
-    	fspatch.py $input_file $input_file/../config/${name}_fs_config >/dev/null 2>&1
-    fi
-    if [ -f $input_file/../config/${name}_file_contexts ];then
-    	contextpatch.py $input_file $input_file/../config/${name}_file_contexts >/dev/null 2>&1
+
+    if [ -f $fs -a -f $file ];then
+    	fspatch.py $input_file $fs >/dev/null 2>&1
+    	contextpatch.py $input_file $file >/dev/null 2>&1
     fi
 
     if [ -f $input_file/$name/build.prop ];then
@@ -728,7 +729,7 @@ repack_img(){
     UTC=$(date -u +%s)
 
     if [ $type = "erofs" ];then
-        mkfs.erofs -zlz4hc,1 -T $UTC --mount-point /$name --fs-config-file $input_file/../config/${name}_fs_config --file-contexts $input_file/../config/${name}_file_contexts $img_out $input_file | grep -v "Processing" || rm -rf $img_out
+        mkfs.erofs -zlz4hc,1 -T $UTC --mount-point=/$name --fs-config-file=$fs --file-contexts=$file $img_out $input_file | grep -v "Processing" || rm -rf $img_out
     elif [ $type = "ext" ];then
         if [[ "$OSTYPE" == "darwin"* ]];then
             size_now=$(find $input_file | xargs stat -f%z | awk ' {s+=$1} END { print s }' )
@@ -742,8 +743,8 @@ repack_img(){
             if [ $xx = "20" ];then
                 break
             fi
-                mke2fs -O ^has_journal -L $input_file -I 256 -i 102400 -M $mount_dir -m 0 -t ext4 -b 4096 $img_out $size #>/dev/null 2>&1
-                e2fsdroid -e -T $UTC -C $input_file/../config/${name}_fs_config -S $input_file/../config/${name}_file_contexts -f $input_file -a /$name $img_out #>/dev/null 2>&1 || rm -rf $img_out
+                mke2fs -O ^has_journal -L $input_file -I 256 -i 102400 -M $mount_dir -m 0 -t ext4 -b 4096 $img_out $size >/dev/null 2>&1
+                e2fsdroid -e -T $UTC -C $fs -S $file -f $input_file -a /$name $img_out >/dev/null 2>&1 || rm -rf $img_out
             if [ ! -f $img_out ];then
                 size=$(($size + 1024))
                 xx=$(($xx + 1)) 
