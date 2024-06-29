@@ -281,7 +281,8 @@ extract_rom(){
     file=`find tmp/extract_rom -name "payload.bin"`
     if [ "$file" ];then
         blue "开始分解 payload.bin包"
-        payload-dumper-go -o $2 tmp/extract_rom/payload.bin >/dev/null 2>&1 ||error "分解 [payload.bin] 时出错"
+        payload-dumper-go -o tmp/extract_rom tmp/extract_rom/payload.bin >/dev/null 2>&1 ||error "分解 [payload.bin] 时出错"
+        rm -r tmp/extract_rom/payload.bin
     fi
 
     #存在br文件即分解
