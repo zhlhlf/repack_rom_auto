@@ -358,12 +358,6 @@ extract_rom(){
         mv -n "$tt" "$2"
     done
 
-    s_dir=`pwd`
-    cd $2
-    sha256sum * > img_sha256sum
-    cat img_sha256sum
-    cd $s_dir
-
     rm -rf tmp/extract_rom rom_image_list 
     green "分解完成 -> $2"
 }
