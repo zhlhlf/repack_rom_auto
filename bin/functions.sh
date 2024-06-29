@@ -757,7 +757,7 @@ repack_img(){
     if [ -f "$img_out" ];then
         green "[$type] repack ${name}.img successfully"
     else
-        error "打包 ${name}.img 分失败"
+        error "[$type] repack ${name}.img fail"
         exit 1
     fi
 }
