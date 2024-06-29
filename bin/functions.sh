@@ -714,10 +714,10 @@ repack_img(){
     
     blue "[$type] $input_file -> $name.img"
     if [ -f $input_file/../config/${name}_fs_config ];then
-    	fspatch.py $input_file $input_file/../config/${name}_fs_config #>/dev/null 2>&1
+    	fspatch.py $input_file $input_file/../config/${name}_fs_config >/dev/null 2>&1
     fi
     if [ -f $input_file/../config/${name}_file_contexts ];then
-    	contextpatch.py $input_file $input_file/../config/${name}_file_contexts #>/dev/null 2>&1
+    	contextpatch.py $input_file $input_file/../config/${name}_file_contexts >/dev/null 2>&1
     fi
 
     if [ -f $input_file/$name/build.prop ];then
@@ -728,7 +728,7 @@ repack_img(){
     UTC=$(date -u +%s)
 
     if [ $type = "erofs" ];then
-        mkfs.erofs -zlz4hc,1 -T $UTC --mount-point /$name --fs-config-file $input_file/../config/${name}_fs_config --file-contexts $input_file/../config/${name}_file_contexts $img_out $input_file #>/dev/null 2>&1 || rm -rf $img_out
+        mkfs.erofs -zlz4hc,1 -T $UTC --mount-point /$name --fs-config-file $input_file/../config/${name}_fs_config --file-contexts $input_file/../config/${name}_file_contexts $img_out $input_file | grep -v "Processing" || rm -rf $img_out
     elif [ $type = "ext" ];then
         if [[ "$OSTYPE" == "darwin"* ]];then
             size_now=$(find $input_file | xargs stat -f%z | awk ' {s+=$1} END { print s }' )
