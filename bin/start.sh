@@ -241,11 +241,11 @@ time=$(date +"%Y-%m-%d")
 hash=$(md5sum out.zip | head -c 10)
 
 if [ $is_yz = true ];then
-    mv out.zip ${base_product_device}_${update_type}_${os_type}_${port_android_version}_from_${port_product_device}_fw_${base_rom_version}-${time}_${pack_type}.zip
+    mv out.zip ${base_product_device}_${update_type}_${os_type}_${port_android_version}_from_${port_product_device}_fw_${base_rom_version}-${pack_type}_${time}.zip
 else
-    mv out.zip ${base_product_device}_${update_type}_${os_type}_${base_rom_version}-${time}_${pack_type}.zip
+    mv out.zip ${base_product_device}_${update_type}_${os_type}_${base_rom_version}-${pack_type}_${time}.zip
 fi
 
 cd ..
 green "输出包路径："
-green `find out -name "*.zip"`
+green `ls out/*.zip`
