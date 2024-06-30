@@ -5,7 +5,7 @@
 ## 补丁
 - patch1精简
 ```
-echo "阉割脚本-------------------" ; curl -sL https://raw.githubusercontent.com/zhlhlf/text/main/sys-del_project/coloros14_ql.sh | sudo bash ; 
+echo "阉割脚本-------------------" ; curl -sL https://raw.githubusercontent.com/zhlhlf/text/main/sys-del_project/coloros14.sh | sudo bash ; 
 ```
 - patch替换底包
 ```
