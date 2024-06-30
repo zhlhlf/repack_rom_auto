@@ -10,7 +10,7 @@ disable_avb_verify=true
 super_list="vendor system product odm my_engineering system_ext my_product my_stock my_heytap my_company my_carrier my_region my_preload my_bigball my_manifest"
 
 # 是否打包为super
-make_super=false
+make_super=true
 
 # 打包的super类型 有 VAB AB A
 super_type=VAB

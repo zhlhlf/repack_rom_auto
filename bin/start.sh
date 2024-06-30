@@ -181,7 +181,7 @@ repack_img "portrom/images/boot"
 # 打包各镜像img
 for pname in ${super_list};do
     if [ -d "portrom/images/$pname" ];then
-        yellow ""
+        echo ""
         repack_img "portrom/images/$pname" $pack_type
     fi
 done
