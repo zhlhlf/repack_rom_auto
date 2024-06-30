@@ -125,8 +125,8 @@ if [ $is_yz = true ];then
     #全局替换device_code
     change_device_buildProp portrom/images
     
-    # fix patchs
-    # . ./patch.sh
+    . ./patch.sh
+    
 else
     list=${super_list}
     list+=" boot reserve"
