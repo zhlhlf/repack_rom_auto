@@ -174,7 +174,7 @@ repack_boot(){
 }
 
 make_super(){
-    green "start pack super.img..."
+    yellow "start pack super.img..."
     super_size=$1 
     super_dir="$2"
     super_list="$3" #system ...
@@ -197,21 +197,19 @@ make_super(){
             argvs+="--partition "$image":none:$img_size:${super_group} --image "$image"=$super_dir/$image.img "
         fi
         sSize=$((sSize + img_size))
-        green "Super sub-partition [$image] size: [$img_size]"
+        blue "Super sub-partition [$image] size: [$img_size]"
     done
 
     argvs+="--device super:$super_size "
     if [ "$super_type" = "VAB" ] || [ "$super_type" = "AB" ];then
-        argvs+="--metadata-slots 3 "
+        argvs+="--metadata-slots 3 --virtual-ab "
         argvs+="--group ${super_group}_a:$super_size "
         argvs+="--group ${super_group}_b:$super_size "
     else
         argvs+="--metadata-slots 2 "
         argvs+="--group ${super_group}:$super_size "
     fi
-    if [ "$super_type" = "VAB" ];then
-    	argvs+="--virtual-ab "
-    fi
+    
     if [ -f "$super_dir/super.img" ];then
         rm -rf $super_dir/super.img
     fi

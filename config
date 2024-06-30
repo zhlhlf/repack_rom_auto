@@ -12,14 +12,8 @@ super_list="vendor system product odm my_engineering system_ext my_product my_st
 # 是否打包为super
 make_super=true
 
-# 打包的super类型 有 VAB AB A
-super_type=VAB
-
 # VAB的super启动的slot
 super_slot=a
-
-# 打包的super大小   9126805504  7516192768
-super_size=7516192768
 
 # 打包的镜像类型 erofs ext auto(按原镜像类型)
 pack_type=erofs
@@ -28,8 +22,6 @@ pack_type=erofs
 base_rom_density=380
 
 build_user="zhlhlf"
-
-build_host=$(hostname)
 
 os_type="ColorOS"
 

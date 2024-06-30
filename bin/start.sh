@@ -181,7 +181,6 @@ repack_img "portrom/images/boot"
 # 打包各镜像img
 for pname in ${super_list};do
     if [ -d "portrom/images/$pname" ];then
-        echo ""
         repack_img "portrom/images/$pname" $pack_type
     fi
 done
@@ -195,6 +194,11 @@ cd ../../
 
 # 打包super
 if [ $make_super = true ];then
+
+    data=`grep "$base_product_device $update_type" bin/superMsgList.txt`
+    super_size=`echo $data | cut -d ' ' -f 3`
+    super_type=`echo $data | cut -d ' ' -f 4`
+
     list=""
     for pa in ${super_list};do
         if [ -f "portrom/images/${pa}.img" ];then
