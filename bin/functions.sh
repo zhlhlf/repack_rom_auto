@@ -757,7 +757,7 @@ repack_img(){
 
 # $1 镜像解包后的位置 比如 asd/boot 那应传入 asd  
 disable_avb_verify() {
-    green "移除avb验证"
+    blue "移除avb验证"
     for i in "vendor/etc/fstab.qcom" "boot/ramdisk/fstab.qcom" "boot/ramdisk/oplus.fstab" "boot/ramdisk/system/etc/fstab.qcom" 
     do
         file=`echo $1 | sed 's/\/$//'`/$i
@@ -773,7 +773,7 @@ disable_avb_verify() {
 
 # $1 镜像解包后的位置 比如 asd/boot 那应传入 asd  
 remove_data_encrypt() {
-    green "移除data分区加密"
+    blue "移除data分区加密"
     for i in "vendor/etc/fstab.qcom" "boot/ramdisk/fstab.qcom" "boot/ramdisk/oplus.fstab" "boot/ramdisk/system/etc/fstab.qcom" 
     do
         file=`echo $1 | sed 's/\/$//'`/$i
@@ -787,7 +787,7 @@ remove_data_encrypt() {
 
 # $1 镜像解包后的位置 比如 asd/boot 那应传入 asd  
 edit_fstab_ext_to_erofs(){
-    green "编辑fstab挂载点ext4 为erofs"
+    blue "编辑fstab挂载点ext4 为erofs"
     for i in "vendor/etc/fstab.qcom" "boot/ramdisk/fstab.qcom" "boot/ramdisk/oplus.fstab" "boot/ramdisk/system/etc/fstab.qcom" 
     do
         file=`echo $1 | sed 's/\/$//'`/$i
@@ -800,7 +800,7 @@ edit_fstab_ext_to_erofs(){
 }
 
 edit_rom_density(){
-    green "设置ro.sf.lcd_density为: $2"
+    blue "设置ro.sf.lcd_density为: $2"
     for prop in $(find $1 -type f -name "build.prop");do
         if grep -q "ro.sf.lcd_density" ${prop};then
             sed -i "s/ro.sf.lcd_density=.*/ro.sf.lcd_density=$2/g" ${prop}
@@ -899,7 +899,7 @@ get_rom_msg(){
 
 #$1 全局路径
 change_device_buildProp(){
-    green "全局替换device_code"
+    blue "全局替换device_code"
     for i in $(find $1 -type f -name "build.prop");do
         sed -i "s/$port_device_code/$base_device_code/g" ${i}
         sed -i "s/$port_rom_model/$base_rom_model/g" ${i}
