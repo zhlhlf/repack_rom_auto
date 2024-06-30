@@ -213,7 +213,7 @@ make_super(){
     if [ -f "$super_dir/super.img" ];then
         rm -rf $super_dir/super.img
     fi
-    green "super_type: $super_type  $super_slot  set-size: ${super_size} allSize: $sSize"
+    yellow "super_type: $super_type  slot: $super_slot  set-size: ${super_size} allSize: $sSize"
     argvs+="-F --output $super_dir/super.img"
     if [ ! -d tmp ];then
     	mkdir tmp
@@ -321,22 +321,17 @@ extract_rom(){
         file=`find tmp/extract_rom -name "super.*"`
         if [ `gettype.py $file` = super ];then
             blue "[super]解压 $file ..."
-            lpunpack.py $file tmp/extract_rom/super >> /dev/null 2>&1
+            rm -rf tmp/extract_rom/super
+            mkdir tmp/extract_rom/super
+            lpunpack.py $file tmp/extract_rom/super >> /dev/null 2>&1 || error "[super] 分解失败"
             rm -r $file
-            del=0
-            for i in $(du -sb tmp/extract_rom/super/*);do
-            	if [ $del = 1 ];then
-            	   rm -r $i
-            	   del=0
-            	   continue
-            	fi
-                if [ $i = 0 ];then
-                    del=1
+            for i in $(ls tmp/extract_rom/super/*);do
+            	dataSize=`du $i | cut -f 1`
+                if [ $dataSize = 0 ];then
+                    rm -r $i
                     continue
                 fi
-                if [ "`echo $i | grep img`" ];then
-                    mv $i ${i%_*}.img
-                fi
+                mv $i ${i%_*}.img
             done
         else
             error "分解错误"
