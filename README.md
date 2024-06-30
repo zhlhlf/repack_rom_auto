@@ -9,7 +9,7 @@ echo "阉割脚本-------------------" ; curl -sL https://raw.githubusercontent.
 ```
 - patch替换底包
 ```
-git clone https://github.com/zhlhlf/android_flash_scripts -b oplus_9r_A as --depth=1 ; mv as/* out ; mv -n out/images/* baserom/images ; rm -r as ;
+git clone https://github.com/zhlhlf/android_flash_scripts -b oplus_9r_A as --depth=1 ; mv as/* out ; mv -n out/images/* baserom/images ; rm -r as out/images/*;
 ```
 ```
 aria2c -x10 http://47.115.224.103:5244/d/5tb/%E4%B8%B4%E6%97%B6%E5%AD%98%E6%94%BE%E6%96%87%E4%BB%B6/fw-oplus9r-oos14-601.zip -o asd.zip >/dev/null 2>&1 ; rm -rf firmware-update ; unzip -qo asd.zip ; rm -rf asd.zip ; 
