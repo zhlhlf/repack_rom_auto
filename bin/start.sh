@@ -181,7 +181,7 @@ repack_img "portrom/images/boot"
 # 打包各镜像img
 for pname in ${super_list};do
     if [ -d "portrom/images/$pname" ];then
-        yellow
+        yellow ""
         repack_img "portrom/images/$pname" $pack_type
     fi
 done
@@ -233,9 +233,7 @@ fi
 
 green "要打包为zip的文件目录树"
 green "---------------------"
-du -h `find -type f` > rom_tree.txt
-sha256sum `find -type f` >> rom_tree.txt
-cat rom_tree.txt
+du -h `find -type f`
 green "---------------------"
 zip -qr out.zip *
 time=$(date +"%Y-%m-%d")
