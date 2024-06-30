@@ -265,7 +265,7 @@ extract_rom(){
         exit 1
     fi
 
-    #进一步处理存在的zip
+    #进一步解压存在的zip
     file=`find tmp/extractRom -name "*.zip"`
     if [ "$file" ];then
         for i in $file;do
@@ -323,7 +323,7 @@ extract_rom(){
         blue "[super]解压 $file ..."
         rm -rf tmp/extractRom/super
         mkdir tmp/extractRom/super
-        lpunpack.py $file tmp/extractRom/super >> /dev/null 2>&1 || error "[super] 分解失败"
+        lpunpack.py $file tmp/extractRom/super >> /dev/null 2>&1 || ( error "[super] 分解失败" ; exit 1 )
         rm -r $file
         for i in $(ls tmp/extractRom/super/*);do
         	dataSize=`du $i | cut -f 1`
@@ -332,10 +332,7 @@ extract_rom(){
                 continue
             fi
             mv $i ${i%_*}.img
-        done
-    else
-        error "分解错误"
-        exit 1
+        done    
     fi
 
     find tmp/extractRom -name "*.img" > rom_image_list
