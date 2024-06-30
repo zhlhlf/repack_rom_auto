@@ -25,8 +25,8 @@ mkdir -p baserom/images portrom/images out/images out/firmware-update
 baseromUrl="$1"
 portromUrl="$2"
 
-baserom=baserom.rom
-portrom=portrom.rom
+baserom=base.rom
+portrom=port.rom
 
 shopt -s expand_aliases
 if [[ "$OSTYPE" == "darwin"* ]]; then

@@ -245,48 +245,48 @@ download_rom(){
 # $1 包的当前绝对路径
 # $2 提取的镜像存放位置
 # 会删除$1文件
-extract_rom(){
+extractRom(){
     if [ ! -f $1 ];then
         yellow "$1 不存在"
         return
     fi
-    rm -rf tmp/extract_rom
-    mkdir -p tmp/extract_rom
+    rm -rf tmp/extractRom
+    mkdir -p tmp/extractRom
 
     rom_pack_type=`gettype.py $1`
     if [ $rom_pack_type = zip ];then
         blue "[zip] 解压 $1 ..."
-        unzip -qo $1 -d tmp/extract_rom || error "[zip]解压 $1 时出错"       
+        unzip -qo $1 -d tmp/extractRom || error "[zip]解压 $1 时出错"       
     elif [ $rom_pack_type = 7z ];then
         blue "[7z] 解压 $1 ..."
-        7z x $1 -otmp/extract_rom >/dev/null 2>&1 || error "[7z]解压 $1 时出错"    
+        7z x $1 -otmp/extractRom >/dev/null 2>&1 || error "[7z]解压 $1 时出错"    
     else
         error "此包暂不支持"
         exit 1
     fi
 
     #进一步处理存在的zip
-    file=`find tmp/extract_rom -name "*.zip"`
+    file=`find tmp/extractRom -name "*.zip"`
     if [ "$file" ];then
         for i in $file;do
             blue "[zip] 解压 $i ..."
-            unzip -qo $i -d tmp/extract_rom
+            unzip -qo $i -d tmp/extractRom
             rm -r $i
         done
     fi
 
     #存在payload.bin即分解
-    file=`find tmp/extract_rom -name "payload.bin"`
+    file=`find tmp/extractRom -name "payload.bin"`
     if [ "$file" ];then
         blue "开始分解 payload.bin包"
-        payload-dumper-go -o tmp/extract_rom tmp/extract_rom/payload.bin >/dev/null 2>&1 ||error "分解 [payload.bin] 时出错"
-        rm -r tmp/extract_rom/payload.bin
+        payload-dumper-go -o tmp/extractRom tmp/extractRom/payload.bin >/dev/null 2>&1 ||error "分解 [payload.bin] 时出错"
+        rm -r tmp/extractRom/payload.bin
     fi
 
     #存在br文件即分解
-    file=`find tmp/extract_rom -name "*new.dat.br"`
+    file=`find tmp/extractRom -name "*new.dat.br"`
     if [ "$file" ];then
-        cd tmp/extract_rom
+        cd tmp/extractRom
         for i in `find -name "*.zip"`;do
             unzip -qo $i
             rm -r $i
@@ -311,27 +311,29 @@ extract_rom(){
     fi
 
     #处理super
-    file=`find tmp/extract_rom -name "*super*"`
+    file=`find tmp/extractRom -name "*super*"`
     if [ "$file" ];then
         if [ `gettype.py $file` = zst ];then
             blue "[zst]解压 $file ..."
-            zstd --rm -d $file -o tmp/extract_rom/super.img >> /dev/null 2>&1
+            zstd --rm -d $file -o tmp/extractRom/super.img >> /dev/null 2>&1
         fi
 
-        file=`find tmp/extract_rom -name "super.*"`
+        file=`find tmp/extractRom -name "super.*"`
         if [ `gettype.py $file` = super ];then
             blue "[super]解压 $file ..."
-            rm -rf tmp/extract_rom/super
-            mkdir tmp/extract_rom/super
-            lpunpack.py $file tmp/extract_rom/super >> /dev/null 2>&1 || error "[super] 分解失败"
+            rm -rf tmp/extractRom/super
+            mkdir tmp/extractRom/super
+            lpunpack.py $file tmp/extractRom/super >> /dev/null 2>&1 || error "[super] 分解失败"
             rm -r $file
-            for i in $(ls tmp/extract_rom/super/*);do
+            for i in $(ls tmp/extractRom/super/*);do
             	dataSize=`du $i | cut -f 1`
                 if [ $dataSize = 0 ];then
                     rm -r $i
                     continue
                 fi
-                mv $i ${i%_*}.img
+                echo "${i%_*}.img"
+
+                #mv $i ${i%_*}.img
             done
         else
             error "分解错误"
@@ -339,7 +341,7 @@ extract_rom(){
         fi
     fi
     
-    find tmp/extract_rom -name "*.img" > rom_image_list
+    find tmp/extractRom -name "*.img" > rom_image_list
     i=1
     while true
     do
@@ -351,7 +353,7 @@ extract_rom(){
         mv -n "$tt" "$2"
     done
 
-    rm -rf tmp/extract_rom rom_image_list 
+    rm -rf tmp/extractRom rom_image_list 
     green "分解完成 -> $2"
 }
 
