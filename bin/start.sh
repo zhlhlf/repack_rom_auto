@@ -68,7 +68,7 @@ fi
 
 if [ ! -f baserom/images/boot.img ];then
     yellow "没在底包中找到boot.img文件"
-    boot_file=`find baserom/images -name "boot*.img" | awk 'NR==1'`
+    boot_file=`find baserom/images -name "boot*office*.img" | awk 'NR==1'`
     if [ ! "$boot_file" ];then
         exit 1
     fi
