@@ -67,13 +67,21 @@ else
 fi
 
 if [ ! -f baserom/images/boot.img ];then
-    yellow "没在底包中找到boot.img文件"
-    boot_file=`find baserom/images -name "boot*office*.img" | awk 'NR==1'`
-    if [ ! "$boot_file" ];then
+    z=0
+    find_list="boot*offi*.img boot*ksu*.img"
+    for i in $find_list;do
+        boot_file=`find baserom/images -name $i | awk 'NR==1'`
+        if [ "$boot_file" ];then
+            z=1
+            yellow "没在底包中不存在boot.img 但是存在 $boot_file"
+            mv -f $boot_file baserom/images/boot.img
+            break
+        fi
+    done
+    if [ $z = 0 ];then
+        yellow "底包中不存在boot.img"
         exit 1
     fi
-    yellow "但是找到了 $boot_file"
-    mv -f $boot_file baserom/images/boot.img
 fi
 
 if [ $is_yz = true ];then
