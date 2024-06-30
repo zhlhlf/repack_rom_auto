@@ -310,37 +310,34 @@ extract_rom(){
         cd ../../
     fi
 
-    #处理super
+    #分解super.zst
     file=`find tmp/extractRom -name "*super*"`
-    if [ "$file" ];then
-        if [ `gettype.py $file` = zst ];then
+    if [ "$file" ] && [ `gettype.py $file` = zst ];then
             blue "[zst]解压 $file ..."
             zstd --rm -d $file -o tmp/extractRom/super.img >> /dev/null 2>&1
-        fi
-
-        file=`find tmp/extractRom -name "super.*"`
-        if [ `gettype.py $file` = super ];then
-            blue "[super]解压 $file ..."
-            rm -rf tmp/extractRom/super
-            mkdir tmp/extractRom/super
-            lpunpack.py $file tmp/extractRom/super >> /dev/null 2>&1 || error "[super] 分解失败"
-            rm -r $file
-            for i in $(ls tmp/extractRom/super/*);do
-            	dataSize=`du $i | cut -f 1`
-                if [ $dataSize = 0 ];then
-                    rm -r $i
-                    continue
-                fi
-                echo "${i%_*}.img"
-
-                #mv $i ${i%_*}.img
-            done
-        else
-            error "分解错误"
-            exit 1
-        fi
     fi
-    
+
+    #分解super.img
+    file=`find tmp/extractRom -name "super.*"`
+    if [ "$file" ] && [ `gettype.py $file` = super ];then
+        blue "[super]解压 $file ..."
+        rm -rf tmp/extractRom/super
+        mkdir tmp/extractRom/super
+        lpunpack.py $file tmp/extractRom/super >> /dev/null 2>&1 || error "[super] 分解失败"
+        rm -r $file
+        for i in $(ls tmp/extractRom/super/*);do
+        	dataSize=`du $i | cut -f 1`
+            if [ $dataSize = 0 ];then
+                rm -r $i
+                continue
+            fi
+            mv $i ${i%_*}.img
+        done
+    else
+        error "分解错误"
+        exit 1
+    fi
+
     find tmp/extractRom -name "*.img" > rom_image_list
     i=1
     while true
