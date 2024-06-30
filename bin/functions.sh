@@ -245,7 +245,7 @@ download_rom(){
 # $1 包的当前绝对路径
 # $2 提取的镜像存放位置
 # 会删除$1文件
-extractRom(){
+extract_rom(){
     if [ ! -f $1 ];then
         yellow "$1 不存在"
         return
