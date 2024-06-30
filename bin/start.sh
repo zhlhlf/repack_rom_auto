@@ -66,6 +66,16 @@ else
     yellow "自定义编辑脚本不存在"
 fi
 
+if [ ! -f baserom/images/boot.img ];then
+    yellow "没在底包中找到boot.img文件"
+    boot_file=`find baserom/images -name "boot*.img" | awk 'NR==1'`
+    if [ ! "$boot_file" ];then
+        exit 1
+    fi
+    yellow "但是找到了 $boot_file"
+    mv -f $boot_file baserom/images/boot.img
+fi
+
 if [ $is_yz = true ];then
     #分解底包指定文件
     green "开始分解底包中指定镜像"
