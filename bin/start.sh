@@ -162,9 +162,9 @@ change_buildTime_buildProp portrom/images
 
 blue "去系统apk签名验证.."
 #处理 framework.jar 去系统apk签名验证
-patch_methods="getMinimumSignatureSchemeVersionForTargetSdk "
-paths="android/util/apk "
-patch1_jar portrom/images/system/system/framework/framework.jar "$paths" "$patch_methods"
+# patch_methods="getMinimumSignatureSchemeVersionForTargetSdk "
+# paths="android/util/apk "
+# patch1_jar portrom/images/system/system/framework/framework.jar "$paths" "$patch_methods"
 
 #处理 services.jar 去系统apk签名验证
 patch_methods="--assertMinSignatureSchemeIsValid "
@@ -262,9 +262,9 @@ time=$(date +"%Y-%m-%d")
 hash=$(md5sum out.zip | head -c 10)
 
 if [ $is_yz = true ];then
-    mv out.zip ${base_product_device}_${update_type}_${os_type}_${port_android_version}_from_${port_product_device}_fw_${base_rom_version}-${pack_type}_${time}.zip
+    mv out.zip ${base_product_device}_${update_type}_${os_type}_${port_android_version}_from_${port_product_device}_${pack_type}_${time}.zip
 else
-    mv out.zip ${base_product_device}_${update_type}_${os_type}_${base_rom_version}-${pack_type}_${time}.zip
+    mv out.zip ${base_product_device}_${update_type}_${os_type}_${base_rom_version}_${pack_type}_${time}.zip
 fi
 
 cd ..
