@@ -853,8 +853,6 @@ change_buildTime_buildProp(){
 }
 
 get_rom_msg(){
-    baseromImagesDir=$1
-    portromImagesDir=$2
 
     blue "Fetching ROM build prop."
     
@@ -866,7 +864,7 @@ get_rom_msg(){
 
     base_android_version=$(< tmp/prop/base.prop grep "ro.build.version.oplusrom=" | awk 'NR==1' |cut -d '=' -f 2)
     base_android_sdk=$(< tmp/prop/base.prop grep "ro.system.build.version.sdk=" | awk 'NR==1' |cut -d '=' -f 2)
-    base_rom_version=$(< tmp/prop/base.prop grep "ro.build.display.id=" | awk 'NR==1' | cut -d "=" -f 2 | cut -d "(" -f 1)
+    base_rom_version=$(< tmp/prop/base.prop grep "ro.build.display.id=" | awk 'NR==1' | cut -d "=" -f 2)
     base_device_code=$(< tmp/prop/base.prop grep "ro.oplus.version.my_manifest=" | awk 'NR==1' | cut -d '=' -f 2 | cut -d "_" -f 1)
     base_product_device=$(< tmp/prop/base.prop grep "ro.product.device=" | awk 'NR==1' |cut -d '=' -f 2)
     base_product_name=$(< tmp/prop/base.prop grep "ro.product.name=" | awk 'NR==1' |cut -d '=' -f 2)
@@ -874,7 +872,7 @@ get_rom_msg(){
     base_my_product_type=$(< tmp/prop/base.prop grep "ro.oplus.image.my_product.type=" | awk 'NR==1' |cut -d '=' -f 2)
     base_market_name=$(< tmp/prop/base.prop grep "ro.vendor.oplus.market.name=" | awk 'NR==1' |cut -d '=' -f 2)
 
-    if [ ! "$portromImagesDir" ];then
+    if [ ! "$2" ];then
         port_android_sdk=$base_android_sdk
         
         green "Android Version: BASEROM:[Android ${base_android_version}]"
@@ -899,7 +897,7 @@ get_rom_msg(){
     port_product_name=$(< tmp/prop/prot.prop grep "ro.product.name=" | awk 'NR==1' |cut -d '=' -f 2)
     port_product_device=$(< tmp/prop/prot.prop grep "ro.product.device=" | awk 'NR==1' |cut -d '=' -f 2)
     port_device_code=$(< tmp/prop/prot.prop grep "ro.oplus.version.my_manifest=" | awk 'NR==1' | cut -d '=' -f 2 | cut -d "_" -f 1)
-    port_rom_version=$(< tmp/prop/prot.prop grep "ro.build.display.id=" | awk 'NR==1' | cut -d "=" -f 2 | cut -d "(" -f 1)    
+    port_rom_version=$(< tmp/prop/prot.prop grep "ro.build.display.id=" | awk 'NR==1' | cut -d "=" -f 2) 
     port_android_sdk=$(< tmp/prop/prot.prop grep "ro.system.build.version.sdk=" | awk 'NR==1' |cut -d '=' -f 2)
     
     target_display_id=$(< tmp/prop/prot.prop grep "ro.build.display.id=" | awk 'NR==1' |cut -d '=' -f 2 | sed 's/$port_device_code/$base_device_code)/g')
