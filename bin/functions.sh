@@ -406,7 +406,7 @@ patch1_jar(){
         for dexfile in tmp/$name/*.dex;do
             smalifname=${dexfile%.*}
             smalifname=$(echo $smalifname | cut -d "/" -f 3)
-            ${BAKSMALI_COMMAND} d --api ${port_android_sdk} ${dexfile} -o tmp/$name/$smalifname 2>&1 || error " Baksmaling 失败"
+            ${BAKSMALI_COMMAND} d --api ${port_android_sdk} ${dexfile} -o tmp/$name/$smalifname 2>&1 || (error " Baksmaling 失败" ; return)
             rm -r $dexfile
         done
 
@@ -426,7 +426,7 @@ patch1_jar(){
 
 
         for smalidir in $(ls tmp/$name);do
-            ${SMALI_COMMAND} a --api ${port_android_sdk} tmp/$name/${smalidir} -o tmp/${smalidir}.dex 2>&1 || error " Smaling 失败"
+            ${SMALI_COMMAND} a --api ${port_android_sdk} tmp/$name/${smalidir} -o tmp/${smalidir}.dex 2>&1 || (error " Baksmaling 失败" ; return)
         done
         cd tmp
         7z a -y -mx0 -tzip $filename *.dex  > /dev/null 2>&1 || error "修改$filename"
@@ -526,7 +526,7 @@ patch2_jar(){
         done
 
         for smalidir in $(ls tmp/$name);do
-            ${SMALI_COMMAND} a --api ${port_android_sdk} tmp/$name/${smalidir} -o tmp/${smalidir}.dex 2>&1 || error " Smaling 失败"
+            ${SMALI_COMMAND} a --api ${port_android_sdk} tmp/$name/${smalidir} -o tmp/${smalidir}.dex 2>&1 || (error " Baksmaling 失败" ; return)
         done
         cd tmp
         7z a -y -mx0 -tzip $filename *.dex  > /dev/null 2>&1 || error "修改$filename"
@@ -562,7 +562,7 @@ patch_smali() {
             smalifname=${dexfile%.*}
             smalifname=$(echo $smalifname | cut -d "/" -f 3)
             ${BAKSMALI_COMMAND} d --api ${port_android_sdk} ${dexfile} -o tmp/$name/$smalifname 2>&1 || error " Baksmaling 失败"
-            ${SMALI_COMMAND} a --api ${port_android_sdk} tmp/$name/${smalidir} -o tmp/$name/${smalidir}.dex > /dev/null 2>&1 || error " Smaling 失败" 
+            ${SMALI_COMMAND} a --api ${port_android_sdk} tmp/$name/${smalidir} -o tmp/$name/${smalidir}.dex > /dev/null 2>&1 || (error " Baksmaling 失败" ; return) 
           
         done
 
@@ -588,7 +588,7 @@ patch_smali() {
             else
                 sed -i "s/$search_pattern/$repalcement_pattern/g" $targetsmali
             fi
-            ${SMALI_COMMAND} a --api ${port_android_sdk} tmp/$name/${smalidir} -o tmp/$name/${smalidir}.dex > /dev/null 2>&1 || error " Smaling 失败"
+            ${SMALI_COMMAND} a --api ${port_android_sdk} tmp/$name/${smalidir} -o tmp/$name/${smalidir}.dex > /dev/null 2>&1 || (error " Baksmaling 失败" ; return)
             pushd tmp/$name/ >/dev/null || exit
             7z a -y -mx0 -tzip $filename ${smalidir}.dex  > /dev/null 2>&1 || error "修改$filename失败"
             popd >/dev/null || exit
@@ -840,7 +840,7 @@ get_rom_msg(){
 
     base_android_version=$(< tmp/prop/base.prop grep "ro.build.version.oplusrom=" | awk 'NR==1' |cut -d '=' -f 2)
     base_android_sdk=$(< tmp/prop/base.prop grep "ro.system.build.version.sdk=" | awk 'NR==1' |cut -d '=' -f 2)
-    base_rom_version=$(< tmp/prop/base.prop grep "ro.build.display.id=" | awk 'NR==1' | cut -d "=" -f2 | cut -d "(" -f1)
+    base_rom_version=$(< tmp/prop/base.prop grep "ro.build.display.id=" | awk 'NR==1' | cut -d "=" -f2 | cut -d "(" -f 1)
     base_device_code=$(< tmp/prop/base.prop grep "ro.oplus.version.my_manifest=" | awk 'NR==1' | cut -d '=' -f 2 | cut -d "_" -f 1)
     base_product_device=$(< tmp/prop/base.prop grep "ro.product.device=" | awk 'NR==1' |cut -d '=' -f 2)
     base_product_name=$(< tmp/prop/base.prop grep "ro.product.name=" | awk 'NR==1' |cut -d '=' -f 2)
@@ -873,7 +873,7 @@ get_rom_msg(){
     port_product_name=$(< tmp/prop/prot.prop grep "ro.product.name=" | awk 'NR==1' |cut -d '=' -f 2)
     port_product_device=$(< tmp/prop/prot.prop grep "ro.product.device=" | awk 'NR==1' |cut -d '=' -f 2)
     port_device_code=$(< tmp/prop/prot.prop grep "ro.oplus.version.my_manifest=" | awk 'NR==1' | cut -d '=' -f 2 | cut -d "_" -f 1)
-    port_rom_version=$(< tmp/prop/prot.prop grep "ro.build.display.id=" | awk 'NR==1' | cut -d "=" -f2 | cut -d "(" -f1)    
+    port_rom_version=$(< tmp/prop/prot.prop grep "ro.build.display.id=" | awk 'NR==1' | cut -d "=" -f2 | cut -d "(" -f 1)    
     port_android_sdk=$(< tmp/prop/prot.prop grep "ro.system.build.version.sdk=" | awk 'NR==1' |cut -d '=' -f 2)
     
     target_display_id=$(< tmp/prop/prot.prop grep "ro.build.display.id=" | awk 'NR==1' |cut -d '=' -f 2 | sed 's/$port_device_code/$base_device_code)/g')

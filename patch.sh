@@ -88,8 +88,7 @@ fi
 for feature in android.hardware.biometrics.face android.hardware.fingerprint;do
     if ! xmlstarlet sel -t -c "//permissions/feature[@name='$feature']"  portrom/images/my_product/etc/permissions/com.oplus.android-features.xml  >/dev/null 2>&1;then 
         echo "Adding feature $feature"
-        xmlstarlet ed -L -s "//permissions" -t elem -n feature -v "" \
-            -i "//permissions/feature[last()]" -t attr -n "name" -v "$feature" portrom/images/my_product/etc/permissions/com.oplus.android-features.xml
+        xmlstarlet ed -L -s "//permissions" -t elem -n feature -v "" -i "//permissions/feature[last()]" -t attr -n "name" -v "$feature" portrom/images/my_product/etc/permissions/com.oplus.android-features.xml
 
     fi
 done
