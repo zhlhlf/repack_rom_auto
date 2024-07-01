@@ -858,7 +858,7 @@ get_rom_msg(){
 
     base_android_version=$(< $1/my_product/build.prop grep "ro.build.version.oplusrom" |awk 'NR==1' |cut -d '=' -f 2)
     base_android_sdk=$(< $1/system/system/build.prop grep "ro.system.build.version.sdk" |awk 'NR==1' |cut -d '=' -f 2)
-    base_rom_version=$(<  $1/my_manifest/build.prop grep "ro.build.display.ota" | awk 'NR==1' | cut -d '=' -f 2)
+    base_rom_version=$(<  $1/my_manifest/build.prop grep "ro.build.display.ota" | awk 'NR==1' | cut -d '=' -f 2 | cut -d '_' -f 2-)
     base_device_code=$(< $1/my_manifest/build.prop grep "ro.oplus.version.my_manifest" | awk 'NR==1' | cut -d '=' -f 2 | cut -d "_" -f 1)
     base_product_device=$(< $1/my_manifest/build.prop grep "ro.product.device" |awk 'NR==1' |cut -d '=' -f 2)
     base_product_name=$(< $1/my_manifest/build.prop grep "ro.product.name" |awk 'NR==1' |cut -d '=' -f 2)
@@ -882,7 +882,7 @@ get_rom_msg(){
 
     port_android_version=$(< $1/my_product/build.prop grep "ro.build.version.oplusrom" |awk 'NR==1' |cut -d '=' -f 2)
     port_android_sdk=$(< $1/system/system/build.prop grep "ro.system.build.version.sdk" |awk 'NR==1' |cut -d '=' -f 2)
-    port_rom_version=$(<  $1/my_manifest/build.prop grep "ro.build.display.ota" | awk 'NR==1' | cut -d '=' -f 2)
+    port_rom_version=$(<  $1/my_manifest/build.prop grep "ro.build.display.ota" | awk 'NR==1' | cut -d '=' -f 2 | cut -d '_' -f 2-)
     port_device_code=$(< $1/my_manifest/build.prop grep "ro.oplus.version.my_manifest" | awk 'NR==1' | cut -d '=' -f 2 | cut -d "_" -f 1)
     port_product_device=$(< $1/my_manifest/build.prop grep "ro.product.device" |awk 'NR==1' |cut -d '=' -f 2)
     port_product_name=$(< $1/my_manifest/build.prop grep "ro.product.name" |awk 'NR==1' |cut -d '=' -f 2)
@@ -933,6 +933,7 @@ change_device_buildProp(){
 }
 
 add_feature() {
+    if [ ! "$1" ];then error "add_feature函数 输入文件不存在" ; fi
     feature=$1
     file=$2
     parent_node=$(xmlstarlet sel -t -m "/*" -v "name()" "$file")
