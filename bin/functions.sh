@@ -855,22 +855,16 @@ change_buildTime_buildProp(){
 get_rom_msg(){
 
     blue "Fetching ROM build prop."
-    
-    rm -rf tmp/prop
-    mkdir -p tmp/prop
-    for i in $(find $1 -type f -name "build.prop");do
-        cat $i >> tmp/prop/base.prop
-    done
 
-    base_android_version=$(< tmp/prop/base.prop grep "ro.build.version.oplusrom=" | awk 'NR==1' |cut -d '=' -f 2)
-    base_android_sdk=$(< tmp/prop/base.prop grep "ro.system.build.version.sdk=" | awk 'NR==1' |cut -d '=' -f 2)
-    base_rom_version=$(< tmp/prop/base.prop grep "ro.build.display.id=" | awk 'NR==1' | cut -d "=" -f 2)
-    base_device_code=$(< tmp/prop/base.prop grep "ro.oplus.version.my_manifest=" | awk 'NR==1' | cut -d '=' -f 2 | cut -d "_" -f 1)
-    base_product_device=$(< tmp/prop/base.prop grep "ro.product.device=" | awk 'NR==1' |cut -d '=' -f 2)
-    base_product_name=$(< tmp/prop/base.prop grep "ro.product.name=" | awk 'NR==1' |cut -d '=' -f 2)
-    base_rom_model=$(< tmp/prop/base.prop grep "ro.product.model=" | awk 'NR==1' |cut -d '=' -f 2)
-    base_my_product_type=$(< tmp/prop/base.prop grep "ro.oplus.image.my_product.type=" | awk 'NR==1' |cut -d '=' -f 2)
-    base_market_name=$(< tmp/prop/base.prop grep "ro.vendor.oplus.market.name=" | awk 'NR==1' |cut -d '=' -f 2)
+    base_android_version=$(< $1/my_product/build.prop grep "ro.build.version.oplusrom" |awk 'NR==1' |cut -d '=' -f 2)
+    base_android_sdk=$(< $1/system/system/build.prop grep "ro.system.build.version.sdk" |awk 'NR==1' |cut -d '=' -f 2)
+    base_rom_version=$(<  $1/my_manifest/build.prop grep "ro.build.display.ota" | awk 'NR==1' | cut -d '=' -f 2)
+    base_device_code=$(< $1/my_manifest/build.prop grep "ro.oplus.version.my_manifest" | awk 'NR==1' | cut -d '=' -f 2 | cut -d "_" -f 1)
+    base_product_device=$(< $1/my_manifest/build.prop grep "ro.product.device" |awk 'NR==1' |cut -d '=' -f 2)
+    base_product_name=$(< $1/my_manifest/build.prop grep "ro.product.name" |awk 'NR==1' |cut -d '=' -f 2)
+    base_market_name=$(< $1/odm/build.prop grep "ro.vendor.oplus.market.name" |awk 'NR==1' |cut -d '=' -f 2)
+    base_rom_model=$(< $1/my_manifest/build.prop grep "ro.product.model" |awk 'NR==1' |cut -d '=' -f 2)
+    base_my_product_type=$(< $1/my_product/build.prop grep "ro.oplus.image.my_product.type" |awk 'NR==1' |cut -d '=' -f 2)
 
     if [ ! "$2" ];then
         port_android_sdk=$base_android_sdk
@@ -886,21 +880,17 @@ get_rom_msg(){
         return
     fi
 
-    for i in $(find $2 -type f -name "build.prop" | grep -v 'odm\|vendor');do
-        cat $i >> tmp/prop/prot.prop
-    done
-
-    port_android_version=$(< tmp/prop/prot.prop grep "ro.build.version.oplusrom=" | awk 'NR==1' |cut -d '=' -f 2)
-    port_my_product_type=$(< tmp/prop/prot.prop grep "ro.oplus.image.my_product.type=" | awk 'NR==1' |cut -d '=' -f 2)
-    port_market_name=$(< tmp/prop/prot.prop grep "ro.vendor.oplus.market.name=" | awk 'NR==1' |cut -d '=' -f 2)
-    port_rom_model=$(< tmp/prop/prot.prop grep "ro.product.model=" | awk 'NR==1' |cut -d '=' -f 2)
-    port_product_name=$(< tmp/prop/prot.prop grep "ro.product.name=" | awk 'NR==1' |cut -d '=' -f 2)
-    port_product_device=$(< tmp/prop/prot.prop grep "ro.product.device=" | awk 'NR==1' |cut -d '=' -f 2)
-    port_device_code=$(< tmp/prop/prot.prop grep "ro.oplus.version.my_manifest=" | awk 'NR==1' | cut -d '=' -f 2 | cut -d "_" -f 1)
-    port_rom_version=$(< tmp/prop/prot.prop grep "ro.build.display.id=" | awk 'NR==1' | cut -d "=" -f 2) 
-    port_android_sdk=$(< tmp/prop/prot.prop grep "ro.system.build.version.sdk=" | awk 'NR==1' |cut -d '=' -f 2)
+    port_android_version=$(< $1/my_product/build.prop grep "ro.build.version.oplusrom" |awk 'NR==1' |cut -d '=' -f 2)
+    port_android_sdk=$(< $1/system/system/build.prop grep "ro.system.build.version.sdk" |awk 'NR==1' |cut -d '=' -f 2)
+    port_rom_version=$(<  $1/my_manifest/build.prop grep "ro.build.display.ota" | awk 'NR==1' | cut -d '=' -f 2)
+    port_device_code=$(< $1/my_manifest/build.prop grep "ro.oplus.version.my_manifest" | awk 'NR==1' | cut -d '=' -f 2 | cut -d "_" -f 1)
+    port_product_device=$(< $1/my_manifest/build.prop grep "ro.product.device" |awk 'NR==1' |cut -d '=' -f 2)
+    port_product_name=$(< $1/my_manifest/build.prop grep "ro.product.name" |awk 'NR==1' |cut -d '=' -f 2)
+    port_market_name=$(< $1/odm/build.prop grep "ro.vendor.oplus.market.name" |awk 'NR==1' |cut -d '=' -f 2)
+    port_rom_model=$(< $1/my_manifest/build.prop grep "ro.product.model" |awk 'NR==1' |cut -d '=' -f 2)
+    port_my_product_type=$(< $1/my_product/build.prop grep "ro.oplus.image.my_product.type" |awk 'NR==1' |cut -d '=' -f 2)
     
-    target_display_id=$(< tmp/prop/prot.prop grep "ro.build.display.id=" | awk 'NR==1' |cut -d '=' -f 2 | sed 's/$port_device_code/$base_device_code)/g')
+    target_display_id=$(< $2/my_manifest/build.prop grep "ro.build.display.id" |awk 'NR==1' |cut -d '=' -f 2 | sed 's/$port_device_code/$base_device_code)/g')
 
     green "Android Version: BASEROM:[Android ${base_android_version}], PORTROM [Android ${port_android_version}]"
     green "SDK Verson: BASEROM: [SDK ${base_android_sdk}], PORTROM: [SDK ${port_android_sdk}]"
@@ -916,12 +906,29 @@ get_rom_msg(){
 change_device_buildProp(){
     blue "全局替换device_code"
     for i in $(find $1 -type f -name "build.prop");do
-        sed -i "s/$port_device_code/$base_device_code/g" ${i}
-        sed -i "s/$port_rom_model/$base_rom_model/g" ${i}
-        sed -i "s/$port_product_name/$base_product_name/g" ${i}
-        sed -i "s/$port_my_product_type/$base_my_product_type/g" ${i}
-        sed -i "s/$port_market_name/$base_market_name/g" ${i}
-        sed -i "s/$port_product_device/$base_product_device/g" ${i}
+        if [ "$port_device_code" -a "$base_device_code" ];then
+            sed -i "s/$port_device_code/$base_device_code/g" ${i}
+        fi
+
+        if [ "$port_rom_model" -a "$base_rom_model" ];then
+            sed -i "s/$port_rom_model/$base_rom_model/g" ${i}
+        fi
+
+        if [ "$port_product_name" -a "$base_product_name" ];then
+            sed -i "s/$port_product_name/$base_product_name/g" ${i}
+        fi
+
+        if [ "$port_my_product_type" -a "$base_my_product_type" ];then        
+            sed -i "s/$port_my_product_type/$base_my_product_type/g" ${i}
+        fi
+
+        if [ "$port_market_name" -a "$base_market_name" ];then
+            sed -i "s/$port_market_name/$base_market_name/g" ${i}
+        fi
+
+        if [ "$port_product_device" -a "$base_product_device" ];then
+            sed -i "s/$port_product_device/$base_product_device/g" ${i}
+        fi
     done
 }
 
