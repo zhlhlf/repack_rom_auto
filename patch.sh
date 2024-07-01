@@ -46,15 +46,14 @@ cp -rf baserom/images/my_product/etc/extension/* portrom/images/my_product/etc/e
 cp -rf  baserom/images/my_product/etc/refresh_rate_config.xml portrom/images/my_product/etc/refresh_rate_config.xml
 cp -rf  baserom/images/my_product/non_overlay portrom/images/my_product/non_overlay
 cp -rf  baserom/images/my_product/etc/sys_resolution_switch_config.xml portrom/images/my_product/etc/sys_resolution_switch_config.xml
+
 add_feature "com.android.systemui.support_media_show" portrom/images/my_product/etc/extension/com.oplus.app-features.xml
-
 add_feature "oplus.software.support_blockable_animation" portrom/images/my_product/etc/extension/com.oplus.oplus-feature.xml
-
 add_feature "oplus.software.support_quick_launchapp" portrom/images/my_product/etc/extension/com.oplus.oplus-feature.xml
 
 features=("oplus.software.display.intelligent_color_temperature_support" "oplus.software.display.dual_sensor_support" "oplus.software.display.lock_color_temperature_in_drag_brightness_bar_support" "oplus.software.display.smart_color_temperature_rhythm_health_support" "oplus.software.display.lhdr_only_dimming_support" "oplus.software.display.screen_calibrate_100apl" "oplus.software.display.rgb_ball_support" "oplus.software.display.screen_select" "oplus.software.display.origin_roundcorner_support")
 
-for feature in "${features[@]}" ; do 
+for feature in "${features[@]}"; do 
     add_feature "$feature" "portrom/images/my_product/etc/permissions/oplus.product.display_features.xml"
 done
 
@@ -86,11 +85,7 @@ fi
 
 # fix fingerprint & face unlock
 for feature in android.hardware.biometrics.face android.hardware.fingerprint;do
-    if ! xmlstarlet sel -t -c "//permissions/feature[@name='$feature']"  portrom/images/my_product/etc/permissions/com.oplus.android-features.xml  >/dev/null 2>&1;then 
-        echo "Adding feature $feature"
-        xmlstarlet ed -L -s "//permissions" -t elem -n feature -v "" -i "//permissions/feature[last()]" -t attr -n "name" -v "$feature" portrom/images/my_product/etc/permissions/com.oplus.android-features.xml
-
-    fi
+    add_feature "$feature" portrom/images/my_product/etc/permissions/com.oplus.android-features.xml
 done
 
 #Devices/机型代码/overlay 按照镜像的目录结构，可直接替换目标。

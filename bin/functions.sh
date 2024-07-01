@@ -558,13 +558,11 @@ patch_smali(){
 
     files=$(find $paths -type f -name "*.smali")
     for targetsmali in $files; do
-        if [ ! "`cat $targetsmali | grep ${search_pattern}`" ];then
+        if [ ! "`cat $targetsmali | grep $3`" ];then
             continue
         fi
         yellow "patch ${targetsmali} ..."
-        search_pattern=$3
-        repalcement_pattern=$4
-        sed -i "s/$search_pattern/$repalcement_pattern/g" $targetsmali
+        sed -i "s/$3/$4/g" $targetsmali
     done
 
     java -jar bin/apktool/APKEditor.jar b -f -i tmp/$name -o tmp/${name}_patched.apk > /dev/null 2>&1
@@ -868,7 +866,7 @@ get_rom_msg(){
 
     base_android_version=$(< tmp/prop/base.prop grep "ro.build.version.oplusrom=" | awk 'NR==1' |cut -d '=' -f 2)
     base_android_sdk=$(< tmp/prop/base.prop grep "ro.system.build.version.sdk=" | awk 'NR==1' |cut -d '=' -f 2)
-    base_rom_version=$(< tmp/prop/base.prop grep "ro.build.display.id=" | awk 'NR==1' | cut -d "=" -f2 | cut -d "(" -f 1)
+    base_rom_version=$(< tmp/prop/base.prop grep "ro.build.display.id=" | awk 'NR==1' | cut -d "=" -f 2 | cut -d "(" -f 1)
     base_device_code=$(< tmp/prop/base.prop grep "ro.oplus.version.my_manifest=" | awk 'NR==1' | cut -d '=' -f 2 | cut -d "_" -f 1)
     base_product_device=$(< tmp/prop/base.prop grep "ro.product.device=" | awk 'NR==1' |cut -d '=' -f 2)
     base_product_name=$(< tmp/prop/base.prop grep "ro.product.name=" | awk 'NR==1' |cut -d '=' -f 2)
@@ -901,7 +899,7 @@ get_rom_msg(){
     port_product_name=$(< tmp/prop/prot.prop grep "ro.product.name=" | awk 'NR==1' |cut -d '=' -f 2)
     port_product_device=$(< tmp/prop/prot.prop grep "ro.product.device=" | awk 'NR==1' |cut -d '=' -f 2)
     port_device_code=$(< tmp/prop/prot.prop grep "ro.oplus.version.my_manifest=" | awk 'NR==1' | cut -d '=' -f 2 | cut -d "_" -f 1)
-    port_rom_version=$(< tmp/prop/prot.prop grep "ro.build.display.id=" | awk 'NR==1' | cut -d "=" -f2 | cut -d "(" -f 1)    
+    port_rom_version=$(< tmp/prop/prot.prop grep "ro.build.display.id=" | awk 'NR==1' | cut -d "=" -f 2 | cut -d "(" -f 1)    
     port_android_sdk=$(< tmp/prop/prot.prop grep "ro.system.build.version.sdk=" | awk 'NR==1' |cut -d '=' -f 2)
     
     target_display_id=$(< tmp/prop/prot.prop grep "ro.build.display.id=" | awk 'NR==1' |cut -d '=' -f 2 | sed 's/$port_device_code/$base_device_code)/g')
@@ -936,9 +934,9 @@ add_feature() {
     feature_node=$(xmlstarlet sel -t -m "/*/*" -v "name()" -n "$file" | head -n 1)
 
     if  grep -nq "$feature" $file ; then
-        blue "功能${feature}已存在，跳过" "Feature $feature already exists, skipping..."
+        blue "Feature $feature already exists, skipping..."
     else
-        blue "添加功能: $feature" "Adding feature $feature"
+        blue  "Adding feature $feature"
         sed -i "/<\/$parent_node>/i\\\t\\<$feature_node name=\"$feature\" \/>" "$file"
     fi
 }
