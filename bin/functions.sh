@@ -840,7 +840,7 @@ get_rom_msg(){
 
     base_android_version=$(< tmp/prop/base.prop grep "ro.build.version.oplusrom=" | awk 'NR==1' |cut -d '=' -f 2)
     base_android_sdk=$(< tmp/prop/base.prop grep "ro.system.build.version.sdk=" | awk 'NR==1' |cut -d '=' -f 2)
-    base_rom_version=$(<  tmp/prop/base.prop grep "ro.build.display.ota=" | awk 'NR==1' | cut -d '=' -f 2 | cut -d "_" -f 2-)
+    base_rom_version=$(< tmp/prop/base.prop grep "ro.build.display.id=" | awk 'NR==1' | cut -d "=" -f2 | cut -d "(" -f1)
     base_device_code=$(< tmp/prop/base.prop grep "ro.oplus.version.my_manifest=" | awk 'NR==1' | cut -d '=' -f 2 | cut -d "_" -f 1)
     base_product_device=$(< tmp/prop/base.prop grep "ro.product.device=" | awk 'NR==1' |cut -d '=' -f 2)
     base_product_name=$(< tmp/prop/base.prop grep "ro.product.name=" | awk 'NR==1' |cut -d '=' -f 2)
@@ -873,7 +873,7 @@ get_rom_msg(){
     port_product_name=$(< tmp/prop/prot.prop grep "ro.product.name=" | awk 'NR==1' |cut -d '=' -f 2)
     port_product_device=$(< tmp/prop/prot.prop grep "ro.product.device=" | awk 'NR==1' |cut -d '=' -f 2)
     port_device_code=$(< tmp/prop/prot.prop grep "ro.oplus.version.my_manifest=" | awk 'NR==1' | cut -d '=' -f 2 | cut -d "_" -f 1)
-    port_rom_version=$(< tmp/prop/prot.prop grep "ro.build.display.ota=" | awk 'NR==1' | cut -d '=' -f 2 | cut -d "_" -f 2-)
+    port_rom_version=$(< tmp/prop/prot.prop grep "ro.build.display.id=" | awk 'NR==1' | cut -d "=" -f2 | cut -d "(" -f1)    
     port_android_sdk=$(< tmp/prop/prot.prop grep "ro.system.build.version.sdk=" | awk 'NR==1' |cut -d '=' -f 2)
     
     target_display_id=$(< tmp/prop/prot.prop grep "ro.build.display.id=" | awk 'NR==1' |cut -d '=' -f 2 | sed 's/$port_device_code/$base_device_code)/g')
@@ -899,4 +899,18 @@ change_device_buildProp(){
         sed -i "s/$port_market_name/$base_market_name/g" ${i}
         sed -i "s/$port_product_device/$base_product_device/g" ${i}
     done
+}
+
+add_feature() {
+    feature=$1
+    file=$2
+    parent_node=$(xmlstarlet sel -t -m "/*" -v "name()" "$file")
+    feature_node=$(xmlstarlet sel -t -m "/*/*" -v "name()" -n "$file" | head -n 1)
+
+    if  grep -nq "$feature" $file ; then
+        blue "功能${feature}已存在，跳过" "Feature $feature already exists, skipping..."
+    else
+        blue "添加功能: $feature" "Adding feature $feature"
+        sed -i "/<\/$parent_node>/i\\\t\\<$feature_node name=\"$feature\" \/>" "$file"
+    fi
 }
