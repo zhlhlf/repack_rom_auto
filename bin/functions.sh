@@ -287,10 +287,6 @@ extract_rom(){
     file=`find tmp/extractRom -name "*new.dat.br"`
     if [ "$file" ];then
         cd tmp/extractRom
-        for i in `find -name "*.zip"`;do
-            unzip -qo $i
-            rm -r $i
-        done
         for i in $(ls *.new.dat.br)
         do
             blue "[br]分解 $i ..."
@@ -301,7 +297,7 @@ extract_rom(){
                 a=${line}.transfer.list
                 b=${line}.new.dat
                 c="${line/.*/}.img"
-                log=$(sdat2img.py $a $b $c)
+                sdat2img.py $a $b $c > /dev/null 2>&1
                 rm -r ${line}.transfer.list
                 rm -r ${line}.new.dat
             fi
@@ -933,16 +929,29 @@ change_device_buildProp(){
 }
 
 add_feature() {
-    if [ ! "$1" ];then error "add_feature函数 输入文件不存在" ; fi
     feature=$1
     file=$2
     parent_node=$(xmlstarlet sel -t -m "/*" -v "name()" "$file")
     feature_node=$(xmlstarlet sel -t -m "/*/*" -v "name()" -n "$file" | head -n 1)
-
-    if  grep -nq "$feature" $file ; then
-        blue "Feature $feature already exists, skipping..."
-    else
-        blue  "Adding feature $feature"
+    found=0
+    for xml in $(find portrom/images/my_product/etc/ -type f -name "*.xml");do
+        if  grep -nq "$feature" $xml ; then
+        blue "功能${feature}已存在，跳过" "Feature $feature already exists, skipping..."
+            found=1
+        fi
+    done
+    if [ $found = 0 -a -f $file]] ; then
+        blue "添加功能: $feature" "Adding feature $feature"
         sed -i "/<\/$parent_node>/i\\\t\\<$feature_node name=\"$feature\" \/>" "$file"
     fi
+}
+
+remove_feature() {
+    feature=$1
+    for file in $(find portrom/images/my_product/etc/ -type f -name "*.xml");do
+        if  grep -nq "$feature" $file ; then
+            blue "删除$feature..." "Deleting $feature from $(basename $file)..."
+            sed -i "/name=\"$feature/d" "$file"
+        fi
+    done
 }
