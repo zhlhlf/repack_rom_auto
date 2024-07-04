@@ -41,9 +41,6 @@ jobs:
       runs-on: ubuntu-20.04
 
       steps:
-        - name: 获取本仓库源码
-          uses: actions/checkout@main
-        
         - name: 最大化并挂载构建空间
           uses: easimon/maximize-build-space@master
           with:
@@ -53,7 +50,11 @@ jobs:
             remove-dotnet: 'true'
             remove-android: 'true'
             remove-haskell: 'true'
-              
+
+        - name: 获取本仓库源码
+          uses: actions/checkout@main
+          fetch-depth: 1
+                    
         - name: 操作
           run: |  
               sudo bash bin/setup.sh > /dev/null 2>&1
