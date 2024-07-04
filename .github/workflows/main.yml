@@ -44,9 +44,15 @@ jobs:
         - name: 获取本仓库源码
           uses: actions/checkout@main
         
-        - name: 打扫空间
-          run: |       
-              curl -sL https://raw.github.com/zhlhlf/text/main/cleanup.sh | bash >/dev/null 2>&1
+        - name: 最大化并挂载构建空间
+          uses: easimon/maximize-build-space@master
+          with:
+            swap-size-mb: 8192
+            root-reserve-mb: 4096
+            temp-reserve-mb: 4096
+            remove-dotnet: 'true'
+            remove-android: 'true'
+            remove-haskell: 'true'
               
         - name: 操作
           run: |  
