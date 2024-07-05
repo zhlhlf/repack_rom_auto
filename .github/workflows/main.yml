@@ -62,6 +62,7 @@ jobs:
 
         - name: 操作
           run: |  
+              df -h ./
               sudo bash bin/setup.sh > /dev/null 2>&1
 
               cat > zhlhlf0.sh <<endl
