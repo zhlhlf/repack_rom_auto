@@ -45,9 +45,6 @@ jobs:
           uses: zhlhlf/maximize-build-space@master
           with:
             swap-size-mb: 8192
-            remove-dotnet: 'true'
-            remove-android: 'true'
-            remove-haskell: 'true'
 
         - name: 获取本仓库源码
           uses: actions/checkout@main
