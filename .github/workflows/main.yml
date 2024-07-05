@@ -49,6 +49,8 @@ jobs:
             rm -r $files
             sudo ln -sf /mnt $files
             sudo chmod 777 *
+            sudo swapoff -a
+            sudo rm -f /mnt/swapfile
             cd $pwd
             df -h ./
 
