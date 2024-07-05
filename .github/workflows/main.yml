@@ -42,14 +42,16 @@ jobs:
 
       steps:
         - name: 最大化并挂载构建空间
-          uses: easimon/maximize-build-space@master
-          with:
-            swap-size-mb: 8192
-            root-reserve-mb: 4096
-            temp-reserve-mb: 4096
-            remove-dotnet: 'true'
-            remove-android: 'true'
-            remove-haskell: 'true'
+          run: |  
+            pwd=`pwd` 
+            files=`basename $pwd`
+            cd ..
+            rm -r $files
+            sudo ln -sf /mnt $files
+            sudo chmod 777 *
+            cd $pwd
+            df -h ./
+
 
         - name: 获取本仓库源码
           uses: actions/checkout@main
