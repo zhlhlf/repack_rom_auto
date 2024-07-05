@@ -41,19 +41,13 @@ jobs:
       runs-on: ubuntu-20.04
 
       steps:
-        - name: 最大化并挂载构建空间
-          run: |  
-            pwd=`pwd` 
-            files=`basename $pwd`
-            cd ..
-            rm -r $files
-            sudo ln -sf /mnt $files
-            sudo chmod 777 *
-            sudo swapoff -a
-            sudo rm -f /mnt/swapfile
-            cd $pwd
-            df -h ./
-
+        - name: 更改交换空间并link构建空间
+          uses: zhlhlf/maximize-build-space@master
+          with:
+            swap-size-mb: 8192
+            remove-dotnet: 'true'
+            remove-android: 'true'
+            remove-haskell: 'true'
 
         - name: 获取本仓库源码
           uses: actions/checkout@main
