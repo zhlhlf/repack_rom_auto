@@ -648,6 +648,7 @@ patch_smali(){
 extract_img() {
     part_img=$1
     part_name=$(basename ${part_img})
+    
     name=`echo $part_name | awk -F'.' '{print $1}'`
     target_dir=$2
 
@@ -657,16 +658,19 @@ extract_img() {
         if [ ! $type = unknow ];then
             blue "[$type] ${part_img} -> ${target_dir}/$name"
         fi
+        else
+            error "暂不支持分解 ${part_img}"
         if [ $type = "ext" ];then
             imgextractor.py ${part_img} ${target_dir} > /dev/null 2>&1  || { error "分解 ${part_name} 失败" "Extracting ${part_name} failed."; exit 1; }
-        
         elif [ $type = "erofs" ];then
             extract.erofs -x -i ${part_img} -o $target_dir > /dev/null 2>&1 || { error "分解 ${part_name} 失败" "Extracting ${part_name} failed." ; exit 1; }
-        
         elif [ $type = "boot" ] || [ $type = "vendor_boot" ];then
             type=boot
             unpack_boot "$part_img" "$target_dir"
-        
+        elif [ $type = sparse ];then
+            new_file=`dirname $part_img`/${name}_raw.img
+            simg2img ${part_img} $new_file
+            extract_img $new_file $target_dir
         else
             error "无法识别img文件类型，请检查" "Unable to handle img, exit."
             exit 1

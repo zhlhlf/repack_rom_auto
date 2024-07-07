@@ -214,6 +214,10 @@ cd ../../
 if [ $make_super = true ];then
 
     data=`grep "$base_product_device $update_type" bin/superMsgList.txt`
+    if [ ! "$data" ];then
+        yellow "未找到 $base_product_device $update_type 机型打包super参数 将使用默认参数"
+        data=`sed -n 1p bin/superMsgList.txt`
+    fi
     super_size=`echo $data | cut -d ' ' -f 3`
     super_type=`echo $data | cut -d ' ' -f 4`
 
