@@ -655,6 +655,17 @@ extract_img() {
     if [ -f ${part_img} ];then
     	rm -rf target_dir/$name
     	type=$(gettype.py ${part_img})
+
+        if [ $type = sparse ];then
+            blue "[$type] ${part_img} unsparse format..." 
+            new_file=`dirname $part_img`/${name}_raw.img
+            simg2img ${part_img} $new_file
+            rm -r $part_img 
+            mv $new_file $part_img
+            extract_img $part_img $target_dir
+            return
+        fi
+
         if [ ! $type = unknow ];then
             blue "[$type] ${part_img} -> ${target_dir}/$name"
         else
@@ -668,10 +679,6 @@ extract_img() {
         elif [ $type = "boot" ] || [ $type = "vendor_boot" ];then
             type=boot
             unpack_boot "$part_img" "$target_dir"
-        elif [ $type = sparse ];then
-            new_file=`dirname $part_img`/${name}_raw.img
-            simg2img ${part_img} $new_file
-            extract_img $new_file $target_dir
         else
             error "无法识别img文件类型，请检查" "Unable to handle img, exit."
             exit 1
