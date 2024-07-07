@@ -657,9 +657,10 @@ extract_img() {
     	type=$(gettype.py ${part_img})
         if [ ! $type = unknow ];then
             blue "[$type] ${part_img} -> ${target_dir}/$name"
-        fi
         else
             error "暂不支持分解 ${part_img}"
+        fi
+
         if [ $type = "ext" ];then
             imgextractor.py ${part_img} ${target_dir} > /dev/null 2>&1  || { error "分解 ${part_name} 失败" "Extracting ${part_name} failed."; exit 1; }
         elif [ $type = "erofs" ];then
@@ -675,6 +676,7 @@ extract_img() {
             error "无法识别img文件类型，请检查" "Unable to handle img, exit."
             exit 1
         fi
+
         if [ -d $target_dir/$name ];then
             green "[$type] ${part_img} extracted."
         fi
