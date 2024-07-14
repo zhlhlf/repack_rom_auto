@@ -1,5 +1,5 @@
+#!/usr/bin/env python
 
-# -*- coding: utf-8 -*-
 # pylint: disable=line-too-long
 # Copyright (C) 2024 The MIO-KITCHEN-SOURCE Project
 #
@@ -17,6 +17,7 @@
 """
 Patch Fs_Config To Add Missing File Config
 """
+
 import os
 from collections import deque
 
