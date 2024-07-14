@@ -735,8 +735,8 @@ repack_img(){
     blue "[$type] $input_file -> $name.img"
 
     if [ -f $fs -a -f $file ];then
-    	fspatch.py $input_file $fs >/dev/null 2>&1
-    	contextpatch.py $input_file $file >/dev/null 2>&1
+    	fspatch.py $input_file $fs >/dev/null 2>&1 || (error "fspatch error" ; exit 1)
+    	contextpatch.py $input_file $file >/dev/null 2>&1 || (error "contextpatch error" ; exit 1)
     fi
 
     if [ -f $input_file/$name/build.prop ];then
