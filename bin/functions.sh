@@ -941,6 +941,37 @@ change_device_buildProp(){
     done
 }
 
+#$1 第几行
+#$2 key
+#$3 文件
+get_prop_line(){
+    gg=`sed -n ${1}p $3 | cut -d ${2}=\" -F 2 | cut -d \" -F 1`
+    echo $gg
+}
+
+
+#$1 第几行
+#$2 key
+#$3 文件
+#$4 new_vlaue
+replace_prop_line(){
+    sed -i "${1}s/$2=\"[^\"]*\" /$2=\"$4\" /" $3
+}
+
+#$1 除数
+#$2 被除数
+#函数: 向上去整除法
+division(){
+    result=$(($1 / $2))
+    remainder=$(($1 % $2))
+
+    # 如果有余数，则结果加 1
+    if [ $remainder -ne 0 ]; then
+        result=$((result + 1))
+    fi
+    echo $result
+}
+
 add_feature() {
     feature=$1
     file=$2
@@ -968,3 +999,4 @@ remove_feature() {
         fi
     done
 }
+
