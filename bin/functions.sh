@@ -945,7 +945,7 @@ change_device_buildProp(){
 #$2 key
 #$3 文件
 get_prop_line(){
-    gg=`sed -n ${1}p $3 | cut -d ${2}=\" -F 2 | cut -d \" -F 1`
+    gg=`sed -n ${1}p $3 | sed "s/.*${2}=\"//g" | cut -d \" -f 1`
     echo $gg
 }
 
