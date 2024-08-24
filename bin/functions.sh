@@ -867,7 +867,7 @@ get_rom_msg(){
 
     base_android_version=$(< $1/my_product/build.prop grep "ro.build.version.oplusrom" |awk 'NR==1' |cut -d '=' -f 2)
     base_android_sdk=$(< $1/system/system/build.prop grep "ro.system.build.version.sdk" |awk 'NR==1' |cut -d '=' -f 2)
-    base_rom_version=$(<  $1/my_manifest/build.prop grep "ro.build.display.ota" | awk 'NR==1' | cut -d '=' -f 2 | cut -d '_' -f 2-)
+    base_rom_version=$(<  $1/my_manifest/build.prop grep "ro.build.display.id" | awk 'NR==1' | cut -d '=' -f 2)
     base_device_code=$(< $1/my_manifest/build.prop grep "ro.oplus.version.my_manifest" | awk 'NR==1' | cut -d '=' -f 2 | cut -d "_" -f 1)
     base_product_device=$(< $1/my_manifest/build.prop grep "ro.product.device" |awk 'NR==1' |cut -d '=' -f 2)
     base_product_name=$(< $1/my_manifest/build.prop grep "ro.product.name" |awk 'NR==1' |cut -d '=' -f 2)
@@ -891,7 +891,7 @@ get_rom_msg(){
 
     port_android_version=$(< $2/my_product/build.prop grep "ro.build.version.oplusrom" |awk 'NR==1' |cut -d '=' -f 2)
     port_android_sdk=$(< $2/system/system/build.prop grep "ro.system.build.version.sdk" |awk 'NR==1' |cut -d '=' -f 2)
-    port_rom_version=$(<  $2/my_manifest/build.prop grep "ro.build.display.ota" | awk 'NR==1' | cut -d '=' -f 2 | cut -d '_' -f 2-)
+    port_rom_version=$(<  $2/my_manifest/build.prop grep "ro.build.display.id" | awk 'NR==1' | cut -d '=' -f 2)
     port_device_code=$(< $2/my_manifest/build.prop grep "ro.oplus.version.my_manifest" | awk 'NR==1' | cut -d '=' -f 2 | cut -d "_" -f 1)
     port_product_device=$(< $2/my_manifest/build.prop grep "ro.product.device" |awk 'NR==1' |cut -d '=' -f 2)
     port_product_name=$(< $2/my_manifest/build.prop grep "ro.product.name" |awk 'NR==1' |cut -d '=' -f 2)
@@ -899,7 +899,7 @@ get_rom_msg(){
     port_rom_model=$(< $2/my_manifest/build.prop grep "ro.product.model" |awk 'NR==1' |cut -d '=' -f 2)
     port_my_product_type=$(< $2/my_product/build.prop grep "ro.oplus.image.my_product.type" |awk 'NR==1' |cut -d '=' -f 2)
     
-    target_display_id=$(< $2/my_manifest/build.prop grep "ro.build.display.id" |awk 'NR==1' |cut -d '=' -f 2 | sed 's/$port_device_code/$base_device_code/g')
+    target_display_id=$(< $2/my_manifest/build.prop grep "ro.build.display.id" |awk 'NR==1' |cut -d '=' -f 2 | sed s/$port_device_code/$base_device_code/g )
 
     green "Android Version: BASEROM:[Android ${base_android_version}], PORTROM [Android ${port_android_version}]"
     green "SDK Verson: BASEROM: [SDK ${base_android_sdk}], PORTROM: [SDK ${port_android_sdk}]"
