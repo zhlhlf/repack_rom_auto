@@ -899,7 +899,7 @@ get_rom_msg(){
     port_rom_model=$(< $2/my_manifest/build.prop grep "ro.product.model" |awk 'NR==1' |cut -d '=' -f 2)
     port_my_product_type=$(< $2/my_product/build.prop grep "ro.oplus.image.my_product.type" |awk 'NR==1' |cut -d '=' -f 2)
     
-    target_display_id=$(< $2/my_manifest/build.prop grep "ro.build.display.id" |awk 'NR==1' |cut -d '=' -f 2 | sed 's/$port_device_code/$base_device_code)/g')
+    target_display_id=$(< $2/my_manifest/build.prop grep "ro.build.display.id" |awk 'NR==1' |cut -d '=' -f 2 | sed 's/$port_device_code/$base_device_code/g')
 
     green "Android Version: BASEROM:[Android ${base_android_version}], PORTROM [Android ${port_android_version}]"
     green "SDK Verson: BASEROM: [SDK ${base_android_sdk}], PORTROM: [SDK ${port_android_sdk}]"
