@@ -1,3 +1,5 @@
+yellow "新版本号: $target_display_id"
+
 
 portrom_version_security_patch=$(< portrom/images/my_manifest/build.prop grep "ro.build.version.security_patch" |awk 'NR==1' |cut -d '=' -f 2 )
 
