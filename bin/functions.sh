@@ -829,6 +829,7 @@ edit_rom_density(){
     blue "设置ro.sf.lcd_density为: $2"
     for prop in $(find $1 -type f -name "build.prop");do
         if grep -q "ro.sf.lcd_density" ${prop};then
+            blue "`grep "ro.sf.lcd_density" ${prop} | cut -d '=' -f 2` -> $2"
             sed -i "s/ro.sf.lcd_density=.*/ro.sf.lcd_density=$2/g" ${prop}
         fi
     done
