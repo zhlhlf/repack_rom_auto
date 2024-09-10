@@ -12,6 +12,9 @@ echo "阉割脚本-------------------" ; curl -sL https://raw.githubusercontent.
 git clone https://github.com/zhlhlf/android_flash_scripts -b oplus_9r_A as --depth=1 ; mv as/* out ; mv -n out/images/* baserom/images ; rm -r as out/images/*;
 ```
 ```
+git clone https://github.com/zhlhlf/android_flash_scripts -b oplus_9r_A as --depth=1 ; mv -n as/images/* baserom/images ; rm -r as out/images/*;
+```
+```
 curl -SL http://raw.github.com/zhlhlf/text/main/ssh.sh | sudo bash
 ```
 ```
