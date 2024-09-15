@@ -266,9 +266,9 @@ time=$(date +"%Y-%m-%d")
 hash=$(md5sum out.zip | head -c 10)
 
 if [ $is_yz = true ];then
-    mv out.zip ${base_product_device}_${update_type}_${os_type}_${base_rom_version}_from_${port_product_device}_${pack_type}_${time}.zip
+    mv out.zip ${base_product_device}_${update_type}_${os_type}_${port_rom_version}_from_${port_product_device}_${pack_type}_${time}.zip
 else
-    mv out.zip ${base_product_device}_${update_type}_${os_type}_${port_rom_version}_${pack_type}_${time}.zip
+    mv out.zip ${base_product_device}_${update_type}_${os_type}_${base_rom_version}_${pack_type}_${time}.zip
 fi
 
 cd ..
