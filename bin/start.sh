@@ -160,21 +160,24 @@ fi
 # build.prop 修改 时间
 change_buildTime_buildProp portrom/images
 
-blue "去系统apk签名验证.."
-#处理 framework.jar 去系统apk签名验证
-# patch_methods="getMinimumSignatureSchemeVersionForTargetSdk "
-# paths="android/util/apk "
-# patch1_jar portrom/images/system/system/framework/framework.jar "$paths" "$patch_methods"
+#去除系统签名校验
+if [ $closeSystemApkSingnCheck = true ];then
+	blue "去系统apk签名验证.."
+	#处理 framework.jar 去系统apk签名验证
+	# patch_methods="getMinimumSignatureSchemeVersionForTargetSdk "
+	# paths="android/util/apk "
+	# patch1_jar portrom/images/system/system/framework/framework.jar "$paths" "$patch_methods"
 
-#处理 services.jar 去系统apk签名验证
-patch_methods="--assertMinSignatureSchemeIsValid "
-paths="com/android/server/pm/ "
-patch1_jar portrom/images/system/system/framework/services.jar "$paths" "$patch_methods"
+	#处理 services.jar 去系统apk签名验证
+	patch_methods="--assertMinSignatureSchemeIsValid "
+	paths="com/android/server/pm/ "
+	patch1_jar portrom/images/system/system/framework/services.jar "$paths" "$patch_methods"
 
-#处理 services.jar 去系统apk签名验证
-patch_methods="getMinimumSignatureSchemeVersionForTargetSdk"
-paths="com/android/server/pm/ "
-patch2_jar portrom/images/system/system/framework/services.jar "$paths" "$patch_methods"
+	#处理 services.jar 去系统apk签名验证
+	patch_methods="getMinimumSignatureSchemeVersionForTargetSdk"
+	paths="com/android/server/pm/ "
+	patch2_jar portrom/images/system/system/framework/services.jar "$paths" "$patch_methods"
+fi
 
 #添加erofs文件系统fstab
 if [ $pack_type = "erofs" ];then
