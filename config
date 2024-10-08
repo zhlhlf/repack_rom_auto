@@ -1,5 +1,8 @@
 # 一些依赖的环境变量 将以. ./config方式导入  所有此文件为sh文件
 
+# 关闭系统apk签名校验 为 true 生效
+closeSystemApkSingnCheck=false
+
 # 移除data分区加密 为 true 生效
 remove_data_encrypt=true
 
