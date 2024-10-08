@@ -19,7 +19,7 @@ super_slot=a
 pack_type=auto
 
 #如果为空不进行更改
-base_rom_density=380
+base_rom_density=
 
 build_user="zhlhlf"
 
